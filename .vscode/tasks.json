@@ -10,6 +10,16 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "deploy",
+      "problemMatcher": []
     }
   ]
 }
