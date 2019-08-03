@@ -1,27 +1,16 @@
 import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components';
 import { generate } from 'shortid';
 import loremHipsum from 'lorem-hipsum';
+import { useNotes } from '../hooks/useNotes';
+import {
+  NewNoteTitle,
+  NewNoteContent,
+  AddButton,
+  GenerateButton,
+  FormFieldSet,
+  FormLegend,
+} from './styles/formStyles';
 import { randomColor } from '../utils/color';
-import { useNotes } from './useNotes';
-
-const NewNoteTitle = styled.input`
-  display: block;
-  margin: 0.25rem 0;
-  width: 100%;
-`;
-
-const NewNoteContent = styled.textarea`
-  display: block;
-  height: 10em;
-  margin: 0.25rem 0;
-  resize: none;
-  width: 100%;
-`;
-
-const AddButton = styled.button``;
-
-const GenerateButton = styled.button``;
 
 const Form = () => {
   const title = useRef();
@@ -70,15 +59,26 @@ const Form = () => {
 
   return (
     <>
-      <NewNoteTitle ref={title} type="textfield" placeholder="Title" maxLength="30" />
-      <NewNoteContent ref={content} placeholder="Contents" />
+      <FormFieldSet>
+        <FormLegend>Create Note</FormLegend>
+        <NewNoteTitle ref={title} type="textfield" placeholder="Title" maxLength="30" />
+        <NewNoteContent ref={content} placeholder="Contents" />
 
-      <AddButton ref={addButton} type="button" style={{ backgroundColor: randomColor() }}>
-        Add Note
-      </AddButton>
-      <GenerateButton ref={generateButton} type="button" style={{ backgroundColor: randomColor() }}>
-        Generate Note
-      </GenerateButton>
+        <AddButton ref={addButton} type="button" style={{ backgroundColor: randomColor() }}>
+          Add Note
+        </AddButton>
+      </FormFieldSet>
+
+      <FormFieldSet>
+        <FormLegend>Generate Notes</FormLegend>
+        <GenerateButton
+          ref={generateButton}
+          type="button"
+          style={{ backgroundColor: randomColor() }}
+        >
+          Generate Note
+        </GenerateButton>
+      </FormFieldSet>
     </>
   );
 };

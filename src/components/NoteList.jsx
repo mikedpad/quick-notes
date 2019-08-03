@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNotes } from './useNotes';
+import { useNotes } from '../hooks/useNotes';
 import Note from './Note';
-import { ListOfNotes } from './styles';
+import { ListOfNotes } from './styles/noteListStyles';
 
 const NoteList = () => {
   const { notes } = useNotes();

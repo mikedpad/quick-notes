@@ -1,16 +1,15 @@
 import React from 'react';
-import { GlobalStyle, Headline, Main, SideForm, NoteSection } from './styles';
+import { GlobalStyle, Headline, Main, SideForm, NoteSection } from './styles/appStyles';
 import Form from './Form';
-import { NoteProvider } from './useNotes';
+import { NoteProvider } from '../hooks/useNotes';
 import NoteList from './NoteList';
-import { randomColor } from '../utils/color';
 
 const App = () => {
   return (
     <>
       <GlobalStyle />
       <header>
-        <Headline style={{ backgroundColor: randomColor() }}>Quick Notes</Headline>
+        <Headline>Quick Notes</Headline>
       </header>
       <Main>
         <NoteProvider>

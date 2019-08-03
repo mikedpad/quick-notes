@@ -1,15 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TweenMax, Power2 } from 'gsap';
-import { Card, Header, Title, Icon, Content } from './styles';
+import { Card, Header, Title, Icon, Content } from './styles/noteStyles';
 import { randomColor } from '../utils/color';
-import { useNotes } from './useNotes';
+import { useNotes } from '../hooks/useNotes';
+
+const tweenOptions = {
+  transform: `scale(0)`,
+  transformOrigin: `center`,
+  ease: Power2.easeIn,
+};
 
 const Note = ({ id, title, content }) => {
   const [isAnimating, setAnimating] = useState(true);
+  const { removeNote } = useNotes();
   const cardRef = useRef();
   const iconRef = useRef();
-  const { removeNote } = useNotes();
 
   useEffect(() => {
     const card = cardRef.current;
@@ -17,12 +23,10 @@ const Note = ({ id, title, content }) => {
     const removeFunc = () => {
       icon.removeEventListener(`click`, removeFunc, false);
       TweenMax.to(card, 0.4, {
+        ...tweenOptions,
         autoAlpha: 0,
-        transform: `scale(0)`,
-        transformOrigin: `center`,
         onComplete: removeNote,
         onCompleteParams: [id],
-        ease: Power2.easeIn,
       });
     };
 
@@ -32,9 +36,7 @@ const Note = ({ id, title, content }) => {
         card,
         0.5,
         {
-          transform: `scale(0)`,
-          transformOrigin: `center`,
-          ease: Power2.easeIn,
+          ...tweenOptions,
         },
         {
           autoAlpha: 1,
