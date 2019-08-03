@@ -1,3 +1,3 @@
-# jaypadillaactor
+# Quick Notes
 
-The website for the actor Jay Padilla
+A simple example of virtual post-it notes using React and Greensock Animation

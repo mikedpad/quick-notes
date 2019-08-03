@@ -1,13 +1,12 @@
 {
   "name": "quick-notes",
   "version": "0.0.2",
-  "description": "Yet another pseudo-application to pretend you have no other means of writing notes",
+  "description": "A simple example of virtual post-it notes using React and Greensock Animation",
   "keywords": [
     "styled-components",
     "gsap",
     "react"
   ],
-  "main": "src/index.js",
   "dependencies": {
     "gsap": "2.1.3",
     "lorem-hipsum": "0.1.7",
