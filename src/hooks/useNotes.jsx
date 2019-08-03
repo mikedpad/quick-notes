@@ -14,8 +14,8 @@ function useNotes() {
     setNotes(notes.filter(({ id }) => id !== noteID));
   };
 
-  const addNote = note => {
-    setNotes([...notes, note]);
+  const addNote = input => {
+    Array.isArray(input) ? setNotes([...notes, ...input]) : setNotes([...notes, input]);
   };
 
   return {
