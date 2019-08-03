@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TweenMax, Power2 } from 'gsap';
 import { Card, Header, Title, Icon, Content } from './styles/noteStyles';
-import { randomColor } from '../utils/color';
 import { useNotes } from '../hooks/useNotes';
 
 const tweenOptions = {
@@ -10,6 +9,7 @@ const tweenOptions = {
   transformOrigin: `center`,
   ease: Power2.easeIn,
 };
+const tweenDuration = 0.2;
 
 const Note = ({ id, title, content }) => {
   const [isAnimating, setAnimating] = useState(true);
@@ -22,7 +22,7 @@ const Note = ({ id, title, content }) => {
     const icon = iconRef.current;
     const removeFunc = () => {
       icon.removeEventListener(`click`, removeFunc, false);
-      TweenMax.to(card, 0.4, {
+      TweenMax.to(card, tweenDuration, {
         ...tweenOptions,
         autoAlpha: 0,
         onComplete: removeNote,
@@ -34,7 +34,7 @@ const Note = ({ id, title, content }) => {
       setAnimating(false);
       TweenMax.fromTo(
         card,
-        0.5,
+        tweenDuration,
         {
           ...tweenOptions,
         },
@@ -55,7 +55,7 @@ const Note = ({ id, title, content }) => {
   }, [id, isAnimating, removeNote]);
 
   return (
-    <Card ref={cardRef} id={id} style={{ backgroundColor: randomColor() }}>
+    <Card ref={cardRef} id={id}>
       <Header>
         <Title>{title}</Title>
         <Icon ref={iconRef} src="/images/deleteIcon.svg" alt="Delete Note" />
