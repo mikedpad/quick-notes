@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.js": "/quick-notes/static/js/main.7550b67e.chunk.js",
-    "main.js.map": "/quick-notes/static/js/main.7550b67e.chunk.js.map",
+    "main.js": "/quick-notes/static/js/main.28693476.chunk.js",
+    "main.js.map": "/quick-notes/static/js/main.28693476.chunk.js.map",
     "runtime~main.js": "/quick-notes/static/js/runtime~main.18cdd470.js",
     "runtime~main.js.map": "/quick-notes/static/js/runtime~main.18cdd470.js.map",
-    "static/js/2.7e141d5c.chunk.js": "/quick-notes/static/js/2.7e141d5c.chunk.js",
-    "static/js/2.7e141d5c.chunk.js.map": "/quick-notes/static/js/2.7e141d5c.chunk.js.map",
+    "static/js/2.a2258233.chunk.js": "/quick-notes/static/js/2.a2258233.chunk.js",
+    "static/js/2.a2258233.chunk.js.map": "/quick-notes/static/js/2.a2258233.chunk.js.map",
     "index.html": "/quick-notes/index.html",
-    "precache-manifest.8b83fdb43c2fde1affddf7ce80d3a699.js": "/quick-notes/precache-manifest.8b83fdb43c2fde1affddf7ce80d3a699.js",
-    "service-worker.js": "/quick-notes/service-worker.js"
+    "precache-manifest.42cea760bd70146488277738b1a0c609.js": "/quick-notes/precache-manifest.42cea760bd70146488277738b1a0c609.js",
+    "service-worker.js": "/quick-notes/service-worker.js",
+    "static/media/deleteIcon.svg": "/quick-notes/static/media/deleteIcon.243848fe.svg"
   }
 }
