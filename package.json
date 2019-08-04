@@ -1,8 +1,13 @@
 {
   "name": "quick-notes",
-  "version": "0.0.2",
+  "version": "0.1.0",
+  "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
-  "homepage": "https://mikedpad.github.io/quick-notes//",
+  "homepage": "https://mikedpad.github.io/quick-notes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikedpad/quick-notes.git"
+  },
   "description": "A simple example of virtual post-it notes using React and Greensock Animation",
   "scripts": {
     "start": "react-scripts start",
@@ -18,7 +23,6 @@
     "react"
   ],
   "dependencies": {
-    "gh-pages": "^2.0.1",
     "gsap": "2.1.3",
     "lorem-hipsum": "0.1.7",
     "polished": "^3.4.1",
@@ -39,6 +43,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.2",
     "eslint-plugin-react-hooks": "^1.6.1",
+    "gh-pages": "^2.0.1",
     "prettier": "^1.18.2"
   },
   "browserslist": [
