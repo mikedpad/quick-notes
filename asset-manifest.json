@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/quick-notes/static/js/main.7550b67e.chunk.js",
+    "main.js.map": "/quick-notes/static/js/main.7550b67e.chunk.js.map",
+    "runtime~main.js": "/quick-notes/static/js/runtime~main.18cdd470.js",
+    "runtime~main.js.map": "/quick-notes/static/js/runtime~main.18cdd470.js.map",
+    "static/js/2.7e141d5c.chunk.js": "/quick-notes/static/js/2.7e141d5c.chunk.js",
+    "static/js/2.7e141d5c.chunk.js.map": "/quick-notes/static/js/2.7e141d5c.chunk.js.map",
+    "index.html": "/quick-notes/index.html",
+    "precache-manifest.8b83fdb43c2fde1affddf7ce80d3a699.js": "/quick-notes/precache-manifest.8b83fdb43c2fde1affddf7ce80d3a699.js",
+    "service-worker.js": "/quick-notes/service-worker.js"
+  }
+}
