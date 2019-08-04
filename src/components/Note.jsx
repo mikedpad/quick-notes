@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TweenMax, Power2 } from 'gsap';
 import { Card, Header, Title, Icon, Content } from './styles/noteStyles';
 import { useNotes } from '../hooks/useNotes';
+import deleteIcon from '../images/deleteIcon.svg';
 
 const tweenOptions = {
   transform: `scale(0)`,
@@ -58,7 +59,7 @@ const Note = ({ id, title, content }) => {
     <Card ref={cardRef} id={id}>
       <Header>
         <Title>{title}</Title>
-        <Icon ref={iconRef} src="/images/deleteIcon.svg" alt="Delete Note" />
+        <Icon ref={iconRef} src={deleteIcon} alt="Delete Note" />
       </Header>
       <Content>{content}</Content>
     </Card>
