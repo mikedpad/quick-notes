@@ -4,13 +4,14 @@ import { normalize } from 'polished';
 import Form from './Form';
 import { NoteProvider } from '../hooks/useNotes';
 import NoteList from './NoteList';
+import '../styles/fonts.css';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize()};
 `;
 
 const Headline = styled.h1`
-  font-family: 'Londrina Shadow', sans-serif;
+  font-family: 'londrina_shadowregular', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   margin: 0;
