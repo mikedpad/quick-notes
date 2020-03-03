@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
   "homepage": "https://mikedpad.github.io/quick-notes",
@@ -11,6 +11,7 @@
   "description": "A simple example of virtual post-it notes using React and Greensock Animation",
   "scripts": {
     "start": "react-scripts start",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "predeploy": "npm run build",
@@ -18,33 +19,33 @@
     "eject": "react-scripts eject"
   },
   "keywords": [
-    "styled-components",
-    "gsap",
+    "post-it",
+    "notes",
     "react"
   ],
   "dependencies": {
-    "gsap": "2.1.3",
+    "gsap": "^3.2.4",
     "lorem-hipsum": "0.1.7",
-    "polished": "^3.4.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-helmet": "^6.0.0-beta",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "shortid": "2.2.14",
-    "styled-components": "^4.3.2"
+    "polished": "^3.4.4",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-helmet": "^6.0.0-beta.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.0",
+    "shortid": "^2.2.15",
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-better-styled-components": "^1.1.1",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2",
-    "eslint-plugin-react-hooks": "^1.6.1",
-    "gh-pages": "^2.0.1",
-    "prettier": "^1.18.2"
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "gh-pages": "^2.2.0",
+    "prettier": "^1.19.1"
   },
   "browserslist": [
     ">0.2%",
