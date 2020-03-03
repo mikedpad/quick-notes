@@ -8,7 +8,6 @@ export const Card = styled.article`
   display: flex;
   flex-flow: column nowrap;
   height: ${noteSize};
-  margin: 1rem;
   opacity: 0;
   outline: 1px solid #00000011;
   width: ${noteSize};

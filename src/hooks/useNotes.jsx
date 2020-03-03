@@ -10,25 +10,20 @@ function useNotes() {
 
   const [notes, setNotes] = context;
 
-  const removeNote = noteID => {
-    setNotes(notes.filter(({ id }) => id !== noteID));
-  };
-
-  const addNote = input => {
-    Array.isArray(input) ? setNotes([...notes, ...input]) : setNotes([...notes, input]);
-  };
-
   return {
     notes,
-    addNote,
-    removeNote,
+    saveNotes: () => localStorage.setItem(`notes`, JSON.stringify(notes, null, 4)),
+    loadNotes: () => setNotes([...JSON.parse(localStorage.getItem(`notes`))]),
+    addNote: input =>
+      Array.isArray(input) ? setNotes([...notes, ...input]) : setNotes([...notes, input]),
+    removeNote: noteID => setNotes(notes.filter(({ id }) => id !== noteID)),
   };
 }
 
-function NoteProvider(props) {
+function NoteProvider({ children }) {
   const [notes, setNotes] = useState([]);
   const value = useMemo(() => [notes, setNotes], [notes]);
-  return <NoteContext.Provider value={value} {...props} />;
+  return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;
 }
 
 export { NoteProvider, useNotes };

@@ -1,15 +1,21 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useNotes } from '../hooks/useNotes';
 import Note from './Note';
-import { ListOfNotes } from './styles/noteListStyles';
+
+const ListOfNotes = styled.section`
+  display: grid;
+  gap: 1rem 1rem;
+  grid-template: repeat(auto-fill, 200px) / repeat(auto-fill, 200px);
+`;
 
 const NoteList = () => {
   const { notes } = useNotes();
 
   return (
     <ListOfNotes>
-      {notes.map(n => (
-        <Note key={n.id} {...n} />
+      {notes.map(({ id, title, content }) => (
+        <Note key={id} id={id} title={title} content={content} />
       ))}
     </ListOfNotes>
   );
