@@ -1,67 +1,51 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { TweenMax, Power2 } from 'gsap';
-import { Card, Header, Title, Icon, Content } from './styles/noteStyles';
-import { useNotes } from '../hooks/useNotes';
-import deleteIcon from '../images/deleteIcon.svg';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import { makeStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
+import { useContextualMenu } from '../hooks/useContextualMenu';
 
-const tweenOptions = {
-  transform: `scale(0)`,
-  transformOrigin: `center`,
-  ease: Power2.easeIn,
-};
-const tweenDuration = 0.2;
+const useStyles = makeStyles(theme => ({
+  card: {
+    background: `linear-gradient(340deg, rgb(209, 209, 54) 0%, rgb(255, 255, 136) 20%)`,
+  },
+  header: {
+    padding: theme.spacing(2, 2, 0, 2),
+  },
+  title: {},
+  content: {
+    maxHeight: `10rem`,
+    overflowY: `scroll`,
+  },
+}));
 
 const Note = ({ id, title, content }) => {
-  const [isAnimating, setAnimating] = useState(true);
-  const { removeNote } = useNotes();
-  const cardRef = useRef();
-  const iconRef = useRef();
-
-  useEffect(() => {
-    const card = cardRef.current;
-    const icon = iconRef.current;
-    const removeFunc = () => {
-      icon.removeEventListener(`click`, removeFunc, false);
-      TweenMax.to(card, tweenDuration, {
-        ...tweenOptions,
-        autoAlpha: 0,
-        onComplete: removeNote,
-        onCompleteParams: [id],
-      });
-    };
-
-    if (isAnimating) {
-      setAnimating(false);
-      TweenMax.fromTo(
-        card,
-        tweenDuration,
-        {
-          ...tweenOptions,
-        },
-        {
-          autoAlpha: 1,
-          transform: `scale(1)`,
-        },
-      );
-    } else {
-      TweenMax.set(card, { autoAlpha: 1 });
-    }
-
-    icon.addEventListener(`click`, removeFunc, false);
-
-    return () => {
-      icon.removeEventListener(`click`, removeFunc, false);
-    };
-  }, [id, isAnimating, removeNote]);
+  const { openMenu } = useContextualMenu();
+  const classes = useStyles();
 
   return (
-    <Card ref={cardRef} id={id}>
-      <Header>
-        <Title>{title}</Title>
-        <Icon ref={iconRef} src={deleteIcon} alt="Delete Note" />
-      </Header>
-      <Content>{content}</Content>
+    <Card data-note-id={id} square className={classes.card}>
+      <CardHeader
+        title={title}
+        titleTypographyProps={{
+          component: `h3`,
+          variant: `h5`,
+          className: classes.title,
+        }}
+        action={
+          <IconButton aria-label="More Info" data-id={id} onClick={openMenu} size="small">
+            <MoreIcon />
+          </IconButton>
+        }
+        className={classes.header}
+      />
+      <CardContent className={classes.content}>
+        <Typography variant="body2">{content}</Typography>
+      </CardContent>
     </Card>
   );
 };

@@ -1,56 +1,44 @@
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import { normalize } from 'polished';
-import Form from './Form';
-import { NoteProvider } from '../hooks/useNotes';
-import NoteList from './NoteList';
-import '../styles/fonts.css';
+import { makeStyles } from '@material-ui/styles';
+import Container from '@material-ui/core/Container';
+import ContextualMenu from './Menu/ContextualMenu';
+import { useNotes } from '../hooks/useNotes';
+import Note from './Note';
+import Header from './Site/Header';
 
-const GlobalStyle = createGlobalStyle`
-  ${normalize()};
-`;
-
-const Headline = styled.h1`
-  font-family: 'londrina_shadowregular', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 400;
-  margin: 0;
-  padding: 0.2em 0;
-  text-align: center;
-  white-space: nowrap;
-`;
-
-const SideForm = styled.aside`
-  flex: 0 1 20%;
-  padding: 1rem;
-`;
-
-const NoteSection = styled.section`
-  flex: 1 1;
-`;
-
-const Main = styled.main`
-  display: flex;
-  flex-flow: row nowrap;
-`;
+const useStyles = makeStyles(() => ({
+  grid: {
+    display: `grid`,
+    gap: `1rem`,
+    margin: `2rem auto`,
+    gridTemplateColumns: `repeat(auto-fill, minmax(15rem, 1fr))`,
+    gridTemplateRows: `repeat(auto-fill, minmax(15rem, 1fr))`,
+  },
+}));
 
 const App = () => {
+  const { notes, removeNote } = useNotes();
+  const classes = useStyles();
+  const handleRemoveNote = id => removeNote(id);
+
   return (
     <>
-      <GlobalStyle />
-      <header>
-        <Headline>Quick Notes</Headline>
-      </header>
-      <Main>
-        <NoteProvider>
-          <SideForm>
-            <Form />
-          </SideForm>
-          <NoteSection>
-            <NoteList />
-          </NoteSection>
-        </NoteProvider>
-      </Main>
+      <Header />
+      <Container component="main" fixed>
+        <section className={classes.grid}>
+          {notes.map(({ id, title, content }) => (
+            <Note key={id} id={id} title={title} content={content} />
+          ))}
+        </section>
+      </Container>
+      <ContextualMenu
+        menuItems={[
+          {
+            label: `Remove`,
+            onClickFunc: handleRemoveNote,
+          },
+        ]}
+      />
     </>
   );
 };

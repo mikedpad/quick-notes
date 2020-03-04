@@ -1,3 +1,3 @@
 # Quick Notes
 
-A simple example of virtual post-it notes using React and Greensock Animation
+A simple example of virtual post-it notes using React and Material UI

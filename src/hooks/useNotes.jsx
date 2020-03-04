@@ -1,4 +1,5 @@
 import React, { useState, useContext, useMemo, createContext } from 'react';
+import useSnackMessages from './useSnackMessages';
 
 const NoteContext = createContext();
 
@@ -9,14 +10,34 @@ function useNotes() {
   }
 
   const [notes, setNotes] = context;
+  const { msgSuccess, msgError } = useSnackMessages();
 
   return {
     notes,
-    saveNotes: () => localStorage.setItem(`notes`, JSON.stringify(notes, null, 4)),
-    loadNotes: () => setNotes([...JSON.parse(localStorage.getItem(`notes`))]),
+    saveNotes: () => {
+      if (notes.length < 1) {
+        msgError(`There are no notes to save!`);
+        return;
+      }
+
+      localStorage.setItem(`notes`, JSON.stringify(notes, null, 4));
+      msgSuccess(`${notes.length} notes successfully saved!`);
+    },
+    loadNotes: () => {
+      try {
+        const restoredNotes = JSON.parse(localStorage.getItem(`notes`));
+        setNotes([...restoredNotes]);
+        msgSuccess(`${restoredNotes.length} notes successfully restored!`);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+        msgError(`There are no notes in storage!`);
+      }
+    },
     addNote: input =>
       Array.isArray(input) ? setNotes([...notes, ...input]) : setNotes([...notes, input]),
     removeNote: noteID => setNotes(notes.filter(({ id }) => id !== noteID)),
+    clearNotes: () => setNotes([]),
   };
 }
 
