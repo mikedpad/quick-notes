@@ -5,24 +5,18 @@ object-assign
 */
 
 /*!
- * CSSPlugin 3.2.4
- * https://greensock.com
- *
- * Copyright 2008-2020, GreenSock. All rights reserved.
- * Subject to the terms at https://greensock.com/standard-license or for
- * Club GreenSock members, the agreement issued with that membership.
- * @author: Jack Doyle, jack@greensock.com
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
 */
 
-/*!
- * GSAP 3.2.4
- * https://greensock.com
+/**
+ * A better abstraction over CSS.
  *
- * @license Copyright 2008-2020, GreenSock. All rights reserved.
- * Subject to the terms at https://greensock.com/standard-license or for
- * Club GreenSock members, the agreement issued with that membership.
- * @author: Jack Doyle, jack@greensock.com
-*/
+ * @copyright Oleg Isonen (Slobodskoi) / Isonen 2014-present
+ * @website https://github.com/cssinjs/jss
+ * @license MIT
+ */
 
 /** @license React v0.19.0
  * scheduler.production.min.js
