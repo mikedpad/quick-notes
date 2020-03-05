@@ -3,7 +3,7 @@ import { reducer, defaultState } from './reducers/contextualMenuReducer';
 
 const ContextualMenuContext = createContext();
 
-const useContextualMenu = () => {
+function useContextualMenu() {
   const context = useContext(ContextualMenuContext);
   if (!context) {
     throw new Error(`useContextualMenu must be used within a ContextualMenuProvider`);
@@ -18,7 +18,7 @@ const useContextualMenu = () => {
       dispatch({ type: `OPEN`, payload: { anchor: currentTarget, id: currentTarget.dataset.id } }),
     closeMenu: () => dispatch({ type: `CLOSE` }),
   };
-};
+}
 
 function ContextualMenuProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, defaultState);

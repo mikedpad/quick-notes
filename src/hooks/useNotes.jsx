@@ -1,4 +1,5 @@
-import React, { useState, useContext, useMemo, createContext } from 'react';
+import React, { useContext, useMemo, createContext, useReducer } from 'react';
+import { reducer, defaultState } from './reducers/notesReducer';
 import useSnackMessages from './useSnackMessages';
 
 const NoteContext = createContext();
@@ -8,42 +9,34 @@ function useNotes() {
   if (!context) {
     throw new Error(`useNotes must be used within a NoteProvider`);
   }
-
-  const [notes, setNotes] = context;
+  const [state, dispatch] = context;
   const { msgSuccess, msgError } = useSnackMessages();
 
   return {
-    notes,
+    notes: state.notes,
+    savedLocalNotes: state.savedLocalNotes,
     saveNotes: () => {
-      if (notes.length < 1) {
+      if (state.notes.length < 1) {
         msgError(`There are no notes to save!`);
         return;
       }
 
-      localStorage.setItem(`notes`, JSON.stringify(notes, null, 4));
-      msgSuccess(`${notes.length} notes successfully saved!`);
+      dispatch({ type: `SAVE_TO_LOCAL_STORAGE` });
+      msgSuccess(`${state.notes.length} notes successfully saved!`);
     },
     loadNotes: () => {
-      try {
-        const restoredNotes = JSON.parse(localStorage.getItem(`notes`));
-        setNotes([...restoredNotes]);
-        msgSuccess(`${restoredNotes.length} notes successfully restored!`);
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-        msgError(`There are no notes in storage!`);
-      }
+      dispatch({ type: `LOAD_FROM_LOCAL_STORAGE` });
+      msgSuccess(`Notes successfully restored!`);
     },
-    addNote: input =>
-      Array.isArray(input) ? setNotes([...notes, ...input]) : setNotes([...notes, input]),
-    removeNote: noteID => setNotes(notes.filter(({ id }) => id !== noteID)),
-    clearNotes: () => setNotes([]),
+    addNote: notes => dispatch({ type: `ADD_NOTE`, payload: notes }),
+    removeNote: id => dispatch({ type: `REMOVE_NOTE`, payload: id }),
+    deleteNotes: () => dispatch({ type: `DELETE_ALL_NOTES` }),
   };
 }
 
 function NoteProvider({ children }) {
-  const [notes, setNotes] = useState([]);
-  const value = useMemo(() => [notes, setNotes], [notes]);
+  const [state, dispatch] = useReducer(reducer, defaultState);
+  const value = useMemo(() => [state, dispatch], [state]);
   return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;
 }
 
