@@ -1,6 +1,8 @@
+const storageKey = `notes`;
+
 export const defaultState = {
-  notes: [],
-  savedLocalNotes: !!JSON.parse(localStorage.getItem(`notes`)),
+  notes: localStorage.getItem(storageKey) ? [...JSON.parse(localStorage.getItem(storageKey))] : [],
+  savedLocalNotes: !!localStorage.getItem(storageKey),
 };
 
 export const reducer = (state, action) => {
@@ -23,7 +25,7 @@ export const reducer = (state, action) => {
         notes: [],
       };
     case `SAVE_TO_LOCAL_STORAGE`:
-      localStorage.setItem(`notes`, JSON.stringify(state.notes, null, 4));
+      localStorage.setItem(storageKey, JSON.stringify(state.notes, null, 4));
       return {
         ...state,
         savedLocalNotes: true,
@@ -31,7 +33,7 @@ export const reducer = (state, action) => {
     case `LOAD_FROM_LOCAL_STORAGE`:
       return {
         ...state,
-        notes: JSON.parse(localStorage.getItem(`notes`)),
+        notes: JSON.parse(localStorage.getItem(storageKey)),
       };
     default:
       throw new Error();
