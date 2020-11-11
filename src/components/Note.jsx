@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
   header: {
     padding: theme.spacing(2, 2, 0, 2),
   },
-  title: {},
+  title: {
+    // fontFamily: `'Helvetica Black', Helvetica, Arial, sans-serif`,
+    fontWeight: 800,
+  },
   content: {
     maxHeight: `10rem`,
     overflowY: `scroll`,
@@ -28,7 +31,7 @@ const Note = ({ id, title, content }) => {
   const classes = useStyles();
 
   return (
-    <Card data-note-id={id} square className={classes.card}>
+    <Card component="article" data-note-id={id} square className={classes.card}>
       <CardHeader
         title={title}
         titleTypographyProps={{
