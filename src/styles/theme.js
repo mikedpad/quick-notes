@@ -1,16 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
-const background = {
-  paper: `#eee`,
-  default: `#fafafa`,
-};
-
-const baseFont = `Roboto, 'Helvetica Neue', Arial, sans-serif`;
-const fonts = {
-  headline: baseFont,
-  body: `Dosis, ${baseFont}`,
-};
-
 const colors = {
   red: {
     main: `#cd1717`,
@@ -49,22 +38,14 @@ export default createMuiTheme({
     primary: colors.blue,
     secondary: colors.green,
     error: colors.red,
-    score: {
-      low: colors.green.light,
-      medium: colors.gold.main,
-      high: colors.red.dark,
-    },
     list: {
       header: colors.gray.light,
       headerBorder: colors.gray.dark,
     },
-    background,
     ...colors,
   },
   typography: {
-    fontFamily: baseFont,
+    fontFamily: `Helvetica, Arial, sans-serif`,
     htmlFontSize: 16,
-    headline: fonts.headline,
-    body: fonts.body,
   },
 });
