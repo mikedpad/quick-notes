@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
   "homepage": "https://mikedpad.github.io/quick-notes",
@@ -26,28 +26,28 @@
     "react"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.9.5",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/styles": "^4.9.0",
-    "lorem-hipsum": "0.1.7",
-    "notistack": "^1.0.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-helmet": "^6.0.0-beta.2",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^4.0.0",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.4",
+    "lorem-hipsum": "^0.1.7",
+    "notistack": "^1.0.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
     "shortid": "^2.2.16"
   },
   "devDependencies": {
-    "eslint": "^7.13.0",
+    "eslint": "^7.27.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "gh-pages": "^3.1.0",
-    "prettier": "^2.1.2"
+    "gh-pages": "^3.2.0",
+    "prettier": "^2.3.0"
   },
   "browserslist": [
     ">0.2%",
