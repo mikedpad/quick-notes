@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
   "homepage": "https://mikedpad.github.io/quick-notes",
@@ -29,7 +29,6 @@
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/styles": "^4.9.0",
-    "gsap": "^3.5.1",
     "lorem-hipsum": "0.1.7",
     "notistack": "^1.0.1",
     "react": "^17.0.1",
@@ -42,7 +41,7 @@
   "devDependencies": {
     "eslint": "^7.13.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
