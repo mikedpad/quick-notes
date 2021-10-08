@@ -9,7 +9,22 @@
 /coverage
 
 # production
+/dist
 /build
+/public
+
+# credentials
+.env
+.env.development
+.env.production
+
+# prisma
+/prisma/*.db
+
+# svelte
+/.svelte-kit
+/package
+
 
 # misc
 .cache
