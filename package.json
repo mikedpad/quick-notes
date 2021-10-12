@@ -1,7 +1,7 @@
 {
   "name": "quick-notes",
   "version": "0.4.0",
-  "description": "A simple example of virtual post-it notes using React and Greensock Animation",
+  "description": "A simple example of virtual post-it notes using SvelteKit and the Carbon Design System by IBM",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
   "homepage": "https://mikedpad.github.io/quick-notes",
@@ -22,12 +22,18 @@
   "keywords": [
     "post-it",
     "notes",
-    "react"
+    "svelte",
+    "sveltekit",
+    "carbon"
   ],
   "devDependencies": {
     "@sveltejs/kit": "next",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
+    "carbon-components-svelte": "latest",
+    "carbon-icons-svelte": "^10.38.0",
+    "carbon-pictograms-svelte": "^12.0.0",
+    "carbon-preprocess-svelte": "^0.6.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -38,11 +44,7 @@
     "sass": "^1.42.1",
     "svelte": "^3.42.6",
     "svelte-check": "^2.2.6",
-    "svelte-preprocess": "^4.9.7",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
-  },
-  "dependencies": {
-    "normalize.css": "^8.0.1"
   }
 }
