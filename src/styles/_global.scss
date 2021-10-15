@@ -1,0 +1,7 @@
+@use 'vars';
+
+:root {
+  color: var(--color);
+  background-color: var(--bgColor);
+  font-family: var(--default-font);
+}

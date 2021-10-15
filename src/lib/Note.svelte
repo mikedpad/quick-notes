@@ -1,45 +1,59 @@
 <script>
-  import { Tile, OverflowMenu, OverflowMenuItem, Modal } from 'carbon-components-svelte';
+  import SVGIcon from '$lib/SVGIcon.svelte';
 
-  let open = false;
+  export let id;
   export let title;
   export let content;
-
-  const openModal = () => (open = true);
-  const closeModal = () => (open = false);
-  const deleteNote = () => {
-    console.log(`Note has been deleted`);
-    closeModal();
-  };
 </script>
 
-<Tile>
-  <div class="header">
-    <h3 class="title">{title}</h3>
-    <OverflowMenu direction="bottom">
-      <OverflowMenuItem primaryFocus danger text="Delete Note" on:click={openModal} />
-    </OverflowMenu>
+<div {id} class="note">
+  <div class="head">
+    <h3>
+      {title}
+    </h3>
+    <button>
+      <SVGIcon type="more" fill="#0009" alt="More Options" />
+    </button>
   </div>
   <div class="content">
     {content}
   </div>
-</Tile>
-<Modal
-  danger
-  bind:open
-  modalHeading={`Delete "${title}"`}
-  primaryButtonText="Delete"
-  secondaryButtonText="Cancel"
-  on:click:button--secondary={closeModal}
-  on:submit={deleteNote}
->
-  <p>This is a permanent action and cannot be undone.</p>
-</Modal>
+</div>
 
-<!-- <style lang="scss">
-  $noteColor: rgb(209, 209, 54);
+<style lang="scss">
+  .note {
+    background-color: linear-gradient(340deg, rgb(209, 209, 54) 0%, rgb(255, 255, 136) 20%);
+    padding: 1rem;
+  }
+  .head {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0 0 1rem;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    overflow: hidden;
+  }
+  button {
+    display: block;
+    border: 0 none;
+    background-color: transparent;
+    line-height: 0;
+    padding: 0.5rem;
+    margin: 0;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out;
 
-  /* .card {
-    background: linear-gradient(340deg, 0%, $noteColor 20%);
-  } */
-</style> -->
+    &:hover {
+      background-color: #0003;
+    }
+  }
+  .content {
+    display: block;
+    overflow-y: scroll;
+  }
+</style>

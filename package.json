@@ -1,7 +1,7 @@
 {
   "name": "quick-notes",
-  "version": "0.4.0",
-  "description": "A simple example of virtual post-it notes using SvelteKit and the Carbon Design System by IBM",
+  "version": "0.4.1",
+  "description": "A simple example of virtual post-it notes using SvelteKit",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
   "homepage": "https://mikedpad.github.io/quick-notes",
@@ -23,21 +23,17 @@
     "post-it",
     "notes",
     "svelte",
-    "sveltekit",
-    "carbon"
+    "sveltekit"
   ],
   "devDependencies": {
     "@sveltejs/kit": "next",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
-    "carbon-components-svelte": "latest",
-    "carbon-icons-svelte": "^10.38.0",
-    "carbon-pictograms-svelte": "^12.0.0",
-    "carbon-preprocess-svelte": "^0.6.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
+    "faker": "^5.5.3",
     "gh-pages": "^3.2.0",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
@@ -46,5 +42,8 @@
     "svelte-check": "^2.2.6",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
   }
 }

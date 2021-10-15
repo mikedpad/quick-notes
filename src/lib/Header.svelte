@@ -1,47 +1,52 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import {
-    Header,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-    SideNav,
-    SideNavItems,
-    SideNavLink,
-    SideNavDivider,
-    HeaderNav,
-    HeaderNavItem,
-    HeaderNavMenu,
-    Link,
-  } from 'carbon-components-svelte';
-  import { DocumentAdd32, Layers32, Save32, Upload32 } from 'carbon-icons-svelte';
+  import Icon from '$lib/SVGIcon.svelte';
+  import Nav from '$lib/Nav.svelte';
 
-  let currentPath = $page.path;
-
-  const items = ['Add', 'Generate', 'Save', 'Load'];
-  const icons = [DocumentAdd32, Layers32, Save32, Upload32];
-  const navItems = items.map((text, i) => {
-    const href = `/${text.toLowerCase()}`;
-    const isSelected = href === currentPath;
-    return { text, href, icon: icons[i], isSelected };
-  });
-
-  let isSideNavOpen = false;
+  let open = false;
+  function toggleMenu(): void {
+    open = !open;
+    console.log(open);
+  }
 </script>
 
-<Header platformName="Quick Notes" href="/" bind:isSideNavOpen expandedByDefault={false}>
-  <HeaderNav>
-    {#each navItems as { text, href, icon, isSelected }}
-      <HeaderNavItem {text} {href} {isSelected} />
-    {/each}
-  </HeaderNav>
-  <SideNav fixed bind:isOpen={isSideNavOpen}>
-    <SideNavItems>
-      {#each navItems as { text, href, icon, isSelected }}
-        <SideNavLink {text} {href} {icon} {isSelected} />
-      {/each}
-    </SideNavItems>
-  </SideNav>
-</Header>
+<header>
+  <div>
+    <button on:click={toggleMenu}>
+      <Icon type="hamburger" alt="Expand menu" />
+    </button>
+    <h1>Quick Notes</h1>
+  </div>
+  <Nav bind:open />
+</header>
+
+<style lang="scss">
+  header {
+    background-color: black;
+    color: white;
+  }
+  div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  button {
+    display: block;
+    border: 0 none;
+    background-color: transparent;
+    line-height: 0;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #fff3;
+    }
+  }
+  h1 {
+    font-weight: 300;
+    font-size: 2.25rem;
+    margin: 1rem 0;
+  }
+</style>
