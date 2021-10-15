@@ -29,8 +29,11 @@
 
 <style lang="scss">
   header {
+    position: sticky;
     background-color: var(--header-bg-color);
+    box-shadow: var(--header-shadow);
     color: var(--header-color);
+    top: 0;
   }
   div {
     display: flex;
