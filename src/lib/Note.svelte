@@ -1,59 +1,108 @@
-<script>
-  import SVGIcon from '$lib/SVGIcon.svelte';
-
+<script lang="ts">
   export let id;
   export let title;
   export let content;
+
+  let open = false;
+
+  function toggleOptions(): void {
+    open = !open;
+    console.log(`Menu for ${id} is ${open ? `open` : `closed`}.`);
+  }
 </script>
 
-<div {id} class="note">
-  <div class="head">
+<article {id}>
+  <header>
     <h3>
       {title}
     </h3>
-    <button>
-      <SVGIcon type="more" fill="#0009" alt="More Options" />
+    <button on:click={toggleOptions} class:active={open}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-labelledby="moreOptionsAlt"
+        viewBox="0 0 24 24"
+      >
+        <title id="moreOptionsAlt">More Options</title>
+        <path
+          d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+        />
+      </svg>
     </button>
-  </div>
+  </header>
   <div class="content">
     {content}
   </div>
-</div>
+</article>
 
 <style lang="scss">
-  .note {
-    background-color: linear-gradient(340deg, rgb(209, 209, 54) 0%, rgb(255, 255, 136) 20%);
-    padding: 1rem;
+  @use 'breakpoints';
+
+  article {
+    background: var(--note-bg);
+    box-shadow: var(--note-shadow);
+    aspect-ratio: 1 / 1;
+
+    // Aspect-ratio fallback
+    // https://css-tricks.com/almanac/properties/a/aspect-ratio/#dealing-with-legacy-browser-support
+    &::before {
+      float: left;
+      padding-top: 100%;
+      content: '';
+    }
+
+    &::after {
+      display: block;
+      content: '';
+      clear: both;
+    }
   }
-  .head {
+  header {
     display: flex;
     flex-flow: row nowrap;
-    margin: 0 0 1rem;
     justify-content: space-between;
     align-items: flex-start;
   }
   h3 {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 600;
+    flex-flow: 1 0;
     margin: 0;
     overflow: hidden;
+    padding: var(--note-padding) 0 0 var(--note-padding);
+
+    @include breakpoints.md {
+      font-size: 1.25rem;
+    }
   }
   button {
     display: block;
     border: 0 none;
     background-color: transparent;
     line-height: 0;
-    padding: 0.5rem;
+    padding: var(--note-padding);
     margin: 0;
     border-radius: 50%;
+    flex-flow: 0 0;
     transition: background-color 0.2s ease-in-out;
 
-    &:hover {
-      background-color: #0003;
+    &.active {
+      background-color: var(--hamburger-hover);
     }
+  }
+  svg {
+    fill: var(--note-menu-icon-color);
+    width: 24px;
+    height: 24px;
   }
   .content {
     display: block;
+    font-size: 1.25rem;
     overflow-y: scroll;
+    padding: var(--note-padding);
+
+    @include breakpoints.md {
+      font-size: 1rem;
+    }
   }
 </style>

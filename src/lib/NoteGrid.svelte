@@ -14,8 +14,8 @@
 
 <style lang="scss">
   .grid {
-    gap: 1rem;
-    margin: 2rem auto;
+    gap: 2rem;
+    margin: 2rem;
     display: grid;
     grid-template-rows: repeat(auto-fill, minmax(15rem, 1fr));
     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
