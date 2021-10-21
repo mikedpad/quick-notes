@@ -1,7 +1,29 @@
 <script lang="ts">
+  import fingerprint from '$images/fingerprint.svg';
+
+  const items = [
+    {
+      icon: fingerprint,
+      text: `Add note`,
+    },
+    {
+      icon: fingerprint,
+      text: `Generate Notes`,
+    },
+    {
+      icon: fingerprint,
+      text: `Save All Notes`,
+    },
+    {
+      icon: fingerprint,
+      text: `Load All Notes`,
+    },
+  ];
+
+  export let open = false;
 </script>
 
-<div role="presentation" class="drawer-root">
+<div role="presentation" class:open={'drawer-root'}>
   <div class="modal-backdrop" aria-hidden="true" />
   <div class="drawer" tabindex="-1">
     <div role="presentation" class="drawer-inner">
@@ -22,86 +44,22 @@
         <h1 class="menu-title">Quick Notes</h1>
       </div>
       <nav class="menu-nav">
-        <div class="menu-item" tabindex="0" role="button" aria-disabled="false">
-          <div class="menu-item-icon">
-            <svg
-              class="svg-icon"
-              focusable="false"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              role="presentation"
-            >
-              <path
-                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"
+        {#each items as { text, icon }, i}
+          <div class="menu-item" tabindex={i} role="button" aria-disabled="false">
+            <div class="menu-item-icon">
+              <img
+                src={icon}
+                class="svg-icon"
+                role="presentation"
+                aria-hidden="true"
+                alt="Fingerprint"
+                width={24}
+                height={24}
               />
-            </svg>
+            </div>
+            <div class="menu-item-text"><span>{text}</span></div>
           </div>
-          <div class="menut-item-text">
-            <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">
-              Add Note
-            </span>
-          </div>
-        </div>
-        <div class="menu-item" tabindex="0" role="button" aria-disabled="false">
-          <div class="menu-item-icon">
-            <svg
-              class="svg-icon"
-              focusable="false"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              role="presentation"
-            >
-              <path d="M8 8H6v7c0 1.1.9 2 2 2h9v-2H8V8z" />
-              <path
-                d="M20 3h-8c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 8h-8V7h8v4zM4 12H2v7c0 1.1.9 2 2 2h9v-2H4v-7z"
-              />
-            </svg>
-          </div>
-          <div class="menut-item-text">
-            <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">
-              Generate Note
-            </span>
-          </div>
-        </div>
-        <hr class="menu-divider" />
-        <div class="menu-item" tabindex="0" role="button" aria-disabled="false">
-          <div class="menu-item-icon">
-            <svg
-              class="svg-icon"
-              focusable="false"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              role="presentation"
-            >
-              <path
-                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
-              />
-            </svg>
-          </div>
-          <div class="menut-item-text">
-            <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">
-              Save All Notes
-            </span>
-          </div>
-        </div>
-        <div class="menu-item" tabindex="0" role="button" aria-disabled="false">
-          <div class="menu-item-icon">
-            <svg
-              class="svg-icon"
-              focusable="false"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              role="presentation"
-            >
-              <path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z" />
-            </svg>
-          </div>
-          <div class="menut-item-text">
-            <span class="MuiTypography-root MuiListItemText-primary MuiTypography-body1">
-              Load Notes
-            </span>
-          </div>
-        </div>
+        {/each}
       </nav>
     </div>
   </div>
@@ -239,13 +197,13 @@
     -webkit-appearance: none;
     -webkit-tap-highlight-color: transparent;
   }
-  .menu-divider {
+  /* .menu-divider {
     border: none;
     height: 1px;
     margin: 0;
     flex-shrink: 0;
     background-color: rgba(0, 0, 0, 0.12);
-  }
+  } */
   .menu-item-icon {
     padding: 0px 16px 0px 8px;
     min-width: 0;
@@ -272,11 +230,11 @@
   }
   .svg-icon {
     fill: currentColor;
-    width: 1em;
-    height: 1em;
+    /* width: 1em;
+    height: 1em; */
     display: inline-block;
     font-size: 1.5rem;
-    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    /* transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; */
     flex-shrink: 0;
     user-select: none;
   }
