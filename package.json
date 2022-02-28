@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A simple example of virtual post-it notes using SvelteKit",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
@@ -11,13 +11,17 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "svelte-kit dev --https --host --open ",
+    "start": "npm run dev -- --https --host --open",
+    "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "preview": "npm run build && svelte-kit preview",
+    "package": "svelte-kit package",
+    "preview": "npm run build && svelte-kit preview --host",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
+    "prepare": "npm run smui-theme",
+    "smui-theme": "smui-theme compile static/smui.css -i src/theme"
   },
   "keywords": [
     "post-it",
@@ -26,22 +30,30 @@
     "sveltekit"
   ],
   "devDependencies": {
-    "@sveltejs/kit": "next",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-svelte3": "^3.2.1",
-    "faker": "^5.5.3",
-    "gh-pages": "^3.2.0",
-    "prettier": "^2.4.1",
-    "prettier-plugin-svelte": "^2.4.0",
+    "@mdi/js": "^6.4.95",
+    "@smui/button": "^5.0.0-beta.7",
+    "@smui/card": "^5.0.0-beta.7",
+    "@smui/common": "^5.0.0-beta.7",
+    "@smui/fab": "^5.0.0-beta.7",
+    "@smui/icon-button": "^5.0.0-beta.7",
+    "@smui/layout-grid": "^5.0.0-beta.7",
+    "@sveltejs/adapter-static": "^1.0.0-next.28",
+    "@sveltejs/kit": "^1.0.0-next.287",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-svelte3": "^3.4.1",
+    "gh-pages": "^3.2.3",
+    "prettier": "^2.5.1",
+    "prettier-plugin-svelte": "^2.6.0",
     "sass": "^1.42.1",
-    "svelte": "^3.42.6",
-    "svelte-check": "^2.2.6",
+    "smui-theme": "^5.0.0-beta.7",
+    "svelte": "^3.46.4",
+    "svelte-check": "^2.4.5",
+    "svelte-preprocess": "^4.10.4",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.5.5"
   },
   "dependencies": {
     "normalize.css": "^8.0.1"
