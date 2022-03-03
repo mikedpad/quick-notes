@@ -39,7 +39,4 @@
     "src/**/*.ts",
     "src/**/*.svelte"
   ],
-  "exclude": [
-    "src/old/**/*.js",
-  ]
 }

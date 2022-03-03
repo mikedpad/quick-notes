@@ -1,18 +1,13 @@
 import path from 'path';
 import adapter from '@sveltejs/adapter-static';
-import sveltePreprocess from 'svelte-preprocess';
+import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: sveltePreprocess({
-    includePaths: [`node_modules`],
-    scss: {
-      includePaths: [`src/styles`],
-    },
-  }),
+  preprocess: preprocess(),
   kit: {
     adapter: adapter({
-      precompress: true,
+      // fallback: '200.html',
     }),
     vite: {
       resolve: {

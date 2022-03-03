@@ -1,3 +1,3 @@
 # Quick Notes
 
-A simple example of virtual post-it notes using Svelte and Svelte Material UI (SMUI)
+A simple example of virtual post-it notes using SvelteKit
