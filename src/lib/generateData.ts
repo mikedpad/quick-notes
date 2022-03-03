@@ -1,4 +1,4 @@
-import faker from 'faker';
+import faker from '@faker-js/faker';
 
 const random = (range: number, min = 1): number => Math.floor(Math.random() * range + min);
 
@@ -31,26 +31,14 @@ const createTitle = (): string => {
 };
 
 const createContent = (): string => {
-  //   const div = document.createElement(`div`);
-  //   div.className = ``;
-  //   const p = document.createElement(`p`);
-  //   div.appendChild(p);
-  //   const txt = document.createTextNode(faker.lorem.sentences());
-  //   p.appendChild(txt);
-  //   return div;
   return faker.lorem.sentences();
 };
 
 export const createNote = (): Note => ({
   id: createID(),
-  title: undefined,
-  content: undefined,
-  // onModalClick: undefined,
+  title: createTitle(),
+  content: createContent(),
+  hidden: false,
+  createdAt: new Date(),
+  updatedAt: undefined,
 });
-
-export const generateNote = (): Note => {
-  const note = createNote();
-  note.title = createTitle();
-  note.content = createContent();
-  return note;
-};

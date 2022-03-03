@@ -2,9 +2,11 @@
 
 type Note = {
   id: string;
-  title?: string;
+  title: string;
   content?: string;
-  // onModalClick?: () => void;
+  hidden?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 type Icon = `add` | `generate` | `save` | `load` | `more` | `hamburger`;

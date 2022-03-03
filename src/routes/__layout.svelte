@@ -1,11 +1,16 @@
 <script lang="ts">
   import Header from '$lib/Header.svelte';
+  import '../styles/app.css';
 </script>
 
 <Header />
-<slot />
+<main>
+  <slot />
+</main>
 
-<style lang="scss">
-  @import 'global';
-  @import 'normalize.css/normalize.css';
+<style>
+  main {
+    padding: 0;
+    margin: 0;
+  }
 </style>
