@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import type { Note } from '../types/note';
 import { faker } from '@faker-js/faker';
+import { nanoid } from 'nanoid';
 
 const random = (range: number, min = 1): number => Math.floor(Math.random() * range + min);
 
@@ -37,7 +38,7 @@ function createContent(): string[] {
 const createNote = (): Note => {
   const date = faker.date.past(5);
   return {
-    id: faker.datatype.uuid(),
+    id: nanoid(),
     title: createTitle(),
     content: createContent(),
     createdAt: date,

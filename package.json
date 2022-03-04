@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "description": "A simple example of virtual post-it notes using SvelteKit",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
