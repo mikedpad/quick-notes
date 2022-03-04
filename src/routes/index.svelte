@@ -1,9 +1,28 @@
 <script lang="ts">
+  import { dev } from '$app/env';
+  // import { onMount } from 'svelte';
   import Note from '$lib/Note.svelte';
-  import { createNote } from '$lib/generateData';
   import { notes } from '$data/store';
+  import AddNote from '$lib/AddNote.svelte';
+  import json from '$data/notes.json';
 
-  $notes = Array.from({ length: 15 }).map(_ => createNote());
+  if (dev) {
+    notes.set(
+      json.map(n => ({
+        ...n,
+        createdAt: new Date(n.createdAt),
+        updatedAt: new Date(n.updatedAt),
+      })),
+    );
+  }
+
+  // onMount(async () => {
+  //   // if (dev) {
+  //   $notes = await fetch('/api/notes')
+  //     .then(res => res.json())
+  //     .then(notes => {});
+  //   // }
+  // });
 </script>
 
 <svelte:head>
@@ -11,8 +30,8 @@
 </svelte:head>
 
 <div class="grid">
-  {#each $notes as { id, title, content }}
-    <Note {id} {title} {content} />
+  {#each $notes as { id, title, content, createdAt, updatedAt }}
+    <Note {id} {title} {content} {createdAt} {updatedAt} />
   {/each}
 </div>
 

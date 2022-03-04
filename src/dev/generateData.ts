@@ -1,8 +1,8 @@
-import faker from '@faker-js/faker';
+import * as fs from 'fs';
+import type { Note } from '../types/note';
+import { faker } from '@faker-js/faker';
 
 const random = (range: number, min = 1): number => Math.floor(Math.random() * range + min);
-
-const createID = (): string => faker.datatype.uuid();
 
 const createName = (): string => {
   const val = random(3);
@@ -30,15 +30,23 @@ const createTitle = (): string => {
   }
 };
 
-const createContent = (): string => {
-  return faker.lorem.sentences();
+function createContent(): string[] {
+  return faker.lorem.paragraphs(random(6, 3)).split('\n \r');
+}
+
+const createNote = (): Note => {
+  const date = faker.date.past(5);
+  return {
+    id: faker.datatype.uuid(),
+    title: createTitle(),
+    content: createContent(),
+    createdAt: date,
+    updatedAt: date,
+  };
 };
 
-export const createNote = (): Note => ({
-  id: createID(),
-  title: createTitle(),
-  content: createContent(),
-  hidden: false,
-  createdAt: new Date(),
-  updatedAt: undefined,
-});
+const notes: Note[] = Array.from({ length: 33 }).map(() => createNote());
+
+const fileName = './src/data/notes.json';
+const jsonData = JSON.stringify(notes, null, 2);
+fs.writeFileSync(fileName, jsonData);

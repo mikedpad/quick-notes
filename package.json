@@ -14,6 +14,7 @@
     "start": "npm run dev -- --host",
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
+    "generateData": "node --experimental-specifier-resolution=node --loader ts-node/esm src/dev/generateData.ts",
     "package": "svelte-kit package",
     "preview": "npm run build && svelte-kit preview --host",
     "check": "svelte-check --tsconfig ./tsconfig.json",

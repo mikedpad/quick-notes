@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AddNote from '$lib/AddNote.svelte';
   import Header from '$lib/Header.svelte';
   import '../styles/app.css';
 </script>
@@ -7,6 +8,7 @@
 <main>
   <slot />
 </main>
+<AddNote />
 
 <style>
   main {

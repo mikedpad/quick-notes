@@ -5,7 +5,7 @@
 @import '@fontsource/roboto/400.css';
 @import '@fontsource/roboto/500.css';
 @import '@fontsource/roboto/700.css';
-@import '@fontsource/material-icons';
+/* @import '@fontsource/material-icons'; */
 
 :root {
   --default-font: 'Roboto', 'Open Sans', 'Source Sans Pro', 'Helvetica Neue', system-ui,
@@ -13,21 +13,24 @@
   --default-monospace-font: 'Roboto MonoVariable', 'Roboto Mono', Menlo, Consolas, Courier,
     monospace;
 
-  --color-fg: #151413;
-  --color-bg: #f5f5f4;
-  --header-color: #fff;
-  --header-bg-color: #000;
+  /* CSS HEX */
+  --bdazzled-blue: #3d5a80;
+  --dark-sky-blue: #98c1d9;
+  --alice-blue: #eff7fa;
+  --light-cyan: #e0fbfc;
+  --cream: #feffc2;
+  --anti-cream: #e5e6ae;
+  --burnt-sienna: #ee6c4d;
+  --gunmetal: #293241;
 
-  --header-box-shadow: 0px 2px 3px 1px rgb(0 0 0 / 20%);
+  --color-fg: var(--gunmetal);
+  --color-bg: var(--light-cyan);
+  --header-fg-color: var(--alice-blue);
+  --header-bg-color: var(--gunmetal);
+  --ui-btn-add-note: var(--burnt-sienna);
 
   --note-width: 300px;
-  --note-bg: #fffecb;
-  --note-box-shadow: 0px -1px 3px 0px rgb(0 0 0 / 10%), 2px 2px 3px 0px rgb(0 0 0 / 20%),
-    1px 3px 2px 0px rgb(0 0 0 / 14%), -1px 2px 3px 0px rgb(0 0 0 / 12%);
-  --note-menu-icon-color: #000;
-  --note-padding: 0.5rem;
 
-  /* Styles */
   color: var(--color);
   background-color: var(--bgColor);
   font-family: var(--default-font);
