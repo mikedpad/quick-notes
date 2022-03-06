@@ -1,6 +1,5 @@
 <script lang="ts">
   import { dev } from '$app/env';
-  // import { onMount } from 'svelte';
   import Note from '$lib/Note.svelte';
   import { notes } from '$data/store';
   import AddNote from '$lib/AddNote.svelte';
@@ -15,14 +14,6 @@
       })),
     );
   }
-
-  // onMount(async () => {
-  //   // if (dev) {
-  //   $notes = await fetch('/api/notes')
-  //     .then(res => res.json())
-  //     .then(notes => {});
-  //   // }
-  // });
 </script>
 
 <svelte:head>

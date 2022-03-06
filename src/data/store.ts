@@ -15,5 +15,4 @@ export function removeNote(id: string) {
 }
 
 // State
-export const navOpen: Writable<boolean> = writable(false);
 export const modalOpen: Writable<boolean> = writable(false);
