@@ -20,6 +20,7 @@
     border: 0;
     border-radius: 50%;
     background-color: var(--ui-btn-add-note);
+    box-shadow: 1px 2px 2px 0 rgb(0 0 0 / 30%);
     display: block;
     position: fixed;
     padding: 0;
