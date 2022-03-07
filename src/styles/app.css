@@ -25,10 +25,12 @@
 
   --color-fg: var(--gunmetal);
   --color-bg: var(--light-cyan);
+  --default-button: #203131;
+  --default-shadow: 1px 2px 2px 0 rgb(0 0 0 / 30%);
+
   --header-fg-color: var(--alice-blue);
   --header-bg-color: var(--gunmetal);
-  --ui-btn-add-note: var(--burnt-sienna);
-
+  --btn-add-note: var(--burnt-sienna);
   --note-width: 300px;
 
   color: var(--color);

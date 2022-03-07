@@ -1,41 +1,39 @@
 <script lang="ts">
+  import DialogButton from '$lib/DialogButton.svelte';
+  import ActionButton from '$lib/ActionButton.svelte';
+  import Modal from '$lib/Modal.svelte';
   import { modalOpen } from '$data/store';
-  import plusSvg from '$images/nav/add.svg';
+  import addIcon from '$images/add.svg';
 
-  modalOpen.subscribe(() => {
-    console.log(`Subscription update -- modalOpen is ${$modalOpen}`);
-  });
+  let nnTitle: HTMLInputElement;
+  let nnText: HTMLTextAreaElement;
 
-  function handleClick() {
-    $modalOpen = !$modalOpen;
+  function createNote() {
+    console.log(nnTitle.value, nnText.value);
   }
 </script>
 
-<button on:click={handleClick}>
-  <img src={plusSvg} alt="Add Note" />
-</button>
+<ActionButton
+  title="Add New Note"
+  iconHref={`${addIcon}#svgId`}
+  floating
+  on:click={() => ($modalOpen = true)}
+  --bgColor="var(--btn-add-note)"
+/>
+<Modal>
+  <div class="title" slot="title">Add Note</div>
+  <div class="content" slot="content">
+    <input type="text" placeholder="Title" bind:this={nnTitle} />
+    <textarea placeholder="Note details" id="add-note-text" bind:this={nnText} />
+  </div>
+  <div class="actions" slot="actions">
+    <DialogButton label="Add Note" on:click={createNote} />
+  </div>
+</Modal>
 
 <style>
-  button {
-    border: 0;
-    border-radius: 50%;
-    background-color: var(--ui-btn-add-note);
-    box-shadow: 1px 2px 2px 0 rgb(0 0 0 / 30%);
-    display: block;
-    position: fixed;
-    padding: 0;
-    margin: 0;
-    width: 56px;
-    height: auto;
-    bottom: 16px;
-    right: 16px;
-  }
-
-  img {
-    display: block;
-    width: 24px;
-    height: 24px;
-    margin: 16px;
-    padding: 0;
+  .content {
+    display: flex;
+    flex-flow: column nowrap;
   }
 </style>

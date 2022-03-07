@@ -1,9 +1,9 @@
 <script lang="ts">
   import { dev } from '$app/env';
-  import Note from '$lib/Note.svelte';
   import { notes } from '$data/store';
-  import AddNote from '$lib/AddNote.svelte';
+  import Note from '$lib/Note.svelte';
   import json from '$data/notes.json';
+  import AddNote from '$lib/AddNote.svelte';
 
   if (dev) {
     notes.set(
@@ -25,6 +25,7 @@
     <Note {id} {title} {content} {createdAt} {updatedAt} />
   {/each}
 </div>
+<AddNote />
 
 <style>
   .grid {
