@@ -1,6 +1,6 @@
 {
   "name": "quick-notes",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A simple example of virtual post-it notes using SvelteKit",
   "author": "Michael Daniel Padilla <michaeldpadilla@gmail.com> (https://mikedpad.com)",
   "license": "MIT",
@@ -30,8 +30,8 @@
   ],
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7",
-    "@sveltejs/adapter-static": "^1.0.0-next.28",
-    "@sveltejs/kit": "^1.0.0-next.287",
+    "@sveltejs/adapter-static": "^1.0.0-next.29",
+    "@sveltejs/kit": "^1.0.0-next.295",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "eslint": "^8.10.0",
@@ -51,6 +51,7 @@
     "@fontsource/material-icons": "^4.5.2",
     "@fontsource/roboto": "^4.5.3",
     "@fontsource/roboto-mono": "^4.5.3",
+    "lodash.debounce": "^4.0.8",
     "nanoid": "^3.3.1"
   }
 }

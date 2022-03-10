@@ -1,8 +1,11 @@
 <script lang="ts">
+  import type { ButtonType } from '$types/types';
+
   export let label: string;
+  export let type: ButtonType = 'button';
 </script>
 
-<button on:click>
+<button {type} on:click>
   {label}
 </button>
 

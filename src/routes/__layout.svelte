@@ -1,5 +1,4 @@
 <script lang="ts">
-  import AddNote from '$lib/AddNote.svelte';
   import '../styles/app.css';
 </script>
 

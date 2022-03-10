@@ -1,11 +1,8 @@
 <script lang="ts">
   export let title: string;
   export let iconHref: string;
-  export let mini: boolean = false;
-  export let floating: boolean = false;
-
-  // Disable until validated
-  // export let validate: () => boolean = undefined;
+  export let mini = false;
+  export let floating = false;
 
   const id = `${title.toLowerCase().split(' ').join('-')}-svg`;
 </script>
@@ -20,13 +17,13 @@
 <style>
   button {
     border: 0;
-    border-radius: 50%;
-    background-color: var(--bgColor, #203131);
+    border-radius: var(--border-radius, 50%);
+    background-color: var(--bgColor, transparent);
     color: var(--color, white);
-    box-shadow: var(--default-shadow);
+    box-shadow: var(--box-shadow, var(--default-shadow));
     display: block;
     padding: 0;
-    margin: 16px;
+    margin: var(--margin, 16px);
     width: 56px;
     height: 56px;
     user-select: none;
@@ -51,7 +48,7 @@
   } */
 
   svg {
-    color: var(--color, '#fff');
+    color: var(--color, canvastext);
     display: block;
     width: 24px;
     height: 24px;

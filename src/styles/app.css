@@ -30,7 +30,6 @@
 
   --header-fg-color: var(--alice-blue);
   --header-bg-color: var(--gunmetal);
-  --btn-add-note: var(--burnt-sienna);
   --note-width: 300px;
 
   color: var(--color);

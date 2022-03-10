@@ -1,11 +1,17 @@
 <script lang="ts">
-  import DialogButton from '$lib/DialogButton.svelte';
-  import ActionButton from '$lib/ActionButton.svelte';
-  import Modal from '$lib/Modal.svelte';
   import { modalOpen } from '$data/store';
+  import ActionButton from '$lib/form/ActionButton.svelte';
+  import DialogButton from '$lib/DialogButton.svelte';
+  import Modal from '$lib/Modal.svelte';
+  import TextArea from '$lib/form/TextArea.svelte';
+  import TextField from '$lib/form/TextField.svelte';
   import addIcon from '$images/add.svg';
-  import tempUi from '$images/temp_ui.png';
-  import TextField from '$lib/TextField.svelte';
+
+  function createNote(e: SubmitEvent) {
+    const formData = new FormData(e.target as HTMLFormElement);
+    console.table([...formData.entries()]);
+    e.preventDefault();
+  }
 </script>
 
 <ActionButton
@@ -13,22 +19,32 @@
   iconHref={`${addIcon}#svgId`}
   floating
   on:click={() => ($modalOpen = true)}
-  --bgColor="var(--btn-add-note)"
+  --bgColor="var(--burnt-sienna)"
+  --color="white"
 />
-<Modal>
-  <div class="title" slot="title">Add Note</div>
-  <div class="content" slot="content">
-    <TextField label="Name" required />
-    <!-- <textarea placeholder="Note details" id="add-note-text" /> -->
-  </div>
-  <div class="actions" slot="actions">
-    <DialogButton label="Add Note" />
-  </div>
+
+<Modal title="Add Note">
+  <form on:submit={createNote}>
+    <div class="content">
+      <TextField label="Title" required />
+      <TextArea label="Contents" required />
+    </div>
+    <div class="actions">
+      <DialogButton label="Add New Note" type="submit" />
+    </div>
+  </form>
 </Modal>
 
 <style>
   .content {
     display: flex;
     flex-flow: column nowrap;
+    margin: 0 16px;
+  }
+  .actions {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
   }
 </style>

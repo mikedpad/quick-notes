@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import type { Note } from '../types/note';
+import type { Note } from '$types/types';
 import { faker } from '@faker-js/faker';
 import { nanoid } from 'nanoid';
 
