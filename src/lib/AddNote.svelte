@@ -4,13 +4,8 @@
   import Modal from '$lib/Modal.svelte';
   import { modalOpen } from '$data/store';
   import addIcon from '$images/add.svg';
-
-  let nnTitle: HTMLInputElement;
-  let nnText: HTMLTextAreaElement;
-
-  function createNote() {
-    console.log(nnTitle.value, nnText.value);
-  }
+  import tempUi from '$images/temp_ui.png';
+  import TextField from '$lib/TextField.svelte';
 </script>
 
 <ActionButton
@@ -23,11 +18,11 @@
 <Modal>
   <div class="title" slot="title">Add Note</div>
   <div class="content" slot="content">
-    <input type="text" placeholder="Title" bind:this={nnTitle} />
-    <textarea placeholder="Note details" id="add-note-text" bind:this={nnText} />
+    <TextField label="Name" required />
+    <!-- <textarea placeholder="Note details" id="add-note-text" /> -->
   </div>
   <div class="actions" slot="actions">
-    <DialogButton label="Add Note" on:click={createNote} />
+    <DialogButton label="Add Note" />
   </div>
 </Modal>
 
