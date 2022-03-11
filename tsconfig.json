@@ -2,10 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "DOM"
-    ],
+    "lib": ["es2020", "DOM", "DOM.Iterable"],
     "target": "es2020",
     "importsNotUsedAsValues": "error",
     "preserveValueImports": true,
@@ -19,24 +16,14 @@
     "allowJs": true,
     "checkJs": true,
     "paths": {
-      "$lib": [
-        "src/lib"
-      ],
-      "$lib/*": [
-        "src/lib/*"
-      ],
-      "$data/*": [
-        "src/data/*"
-      ],
-      "$images/*": [
-        "src/images/*"
-      ]
-    }
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$data/*": ["src/data/*"],
+      "$images/*": ["src/images/*"],
+      "$types/*": ["src/types/*"]
+    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.js",
-    "src/**/*.ts",
-    "src/**/*.svelte"
-  ],
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
 }
