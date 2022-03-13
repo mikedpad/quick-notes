@@ -1,4 +1,5 @@
 <script lang="ts">
+  // import { addNote } from '$data/noteStore';
   import { modalOpen } from '$data/store';
   import ActionButton from '$lib/form/ActionButton.svelte';
   import DialogButton from '$lib/DialogButton.svelte';
@@ -9,7 +10,11 @@
 
   function createNote(e: SubmitEvent) {
     const formData = new FormData(e.target as HTMLFormElement);
-    console.table([...formData.entries()]);
+    const entries = formData.entries();
+    const arrOfEntries = Array.from(entries);
+    console.log(entries);
+    console.log(arrOfEntries);
+    console.log([...formData.entries()]);
     e.preventDefault();
   }
 </script>
