@@ -6,6 +6,14 @@
   export let label: string;
   export let required = false;
 
+  let inputText: HTMLInputElement;
+  export function getValue() {
+    return inputText.value;
+  }
+  export function isEmpty() {
+    return inputText.value.length === 0;
+  }
+
   const { id, onInput, onInvalid } = getValidityListeners('textfield');
 </script>
 
@@ -19,6 +27,7 @@
     {required}
     on:input={onInput}
     on:invalid={onInvalid}
+    bind:this={inputText}
   />
   <label for={id}>
     {label}

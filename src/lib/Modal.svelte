@@ -5,8 +5,8 @@
   import ActionButton from '$lib/form/ActionButton.svelte';
 
   export let title: string;
-
   export let confirmBeforeClose = false;
+
   function confirmClose() {
     if (confirmBeforeClose) {
       window.confirm(`Unsaved changes will be lost. Are you sure?`) && modalOpen.set(false);

@@ -6,6 +6,14 @@
   export let label: string;
   export let required = false;
 
+  let textArea: HTMLTextAreaElement;
+  export function getValue() {
+    return textArea.value;
+  }
+  export function isEmpty() {
+    return textArea.value.length === 0;
+  }
+
   const { id, onInput, onInvalid } = getValidityListeners('textarea');
 </script>
 
@@ -18,6 +26,7 @@
     {required}
     on:input={onInput}
     on:invalid={onInvalid}
+    bind:this={textArea}
   />
   <label for={id}>
     {label}

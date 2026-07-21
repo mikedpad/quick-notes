@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import { addNote } from '$data/noteStore';
   import { modalOpen } from '$data/store';
   import ActionButton from '$lib/form/ActionButton.svelte';
   import DialogButton from '$lib/DialogButton.svelte';
@@ -8,15 +7,8 @@
   import TextField from '$lib/form/TextField.svelte';
   import addIcon from '$images/add.svg';
 
-  function createNote(e: SubmitEvent) {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const entries = formData.entries();
-    const arrOfEntries = Array.from(entries);
-    console.log(entries);
-    console.log(arrOfEntries);
-    console.log([...formData.entries()]);
-    e.preventDefault();
-  }
+  let inputTitle: TextField;
+  let inputContents: TextArea;
 </script>
 
 <ActionButton
@@ -28,11 +20,11 @@
   --color="white"
 />
 
-<Modal title="Add Note">
-  <form on:submit={createNote}>
+<Modal title="Add Note" confirmBeforeClose>
+  <form method="post" action="/">
     <div class="content">
-      <TextField label="Title" required />
-      <TextArea label="Contents" required />
+      <TextField label="Title" required bind:this={inputTitle} />
+      <TextArea label="Contents" required bind:this={inputContents} />
     </div>
     <div class="actions">
       <DialogButton label="Add New Note" type="submit" />
