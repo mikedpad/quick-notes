@@ -1,15 +1,18 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2020", "DOM", "DOM.Iterable"],
-    "paths": {
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
-      "$data/*": ["src/data/*"],
-      "$images/*": ["src/images/*"],
-      "$types/*": ["src/types/*"]
-    },
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "bundler",
     "noUnusedLocals": true,
     "noUnusedParameters": true
   }
+  // Path aliases are declared in svelte.config.js (kit.alias) and inherited
+  // from .svelte-kit/tsconfig.json — do not redeclare "paths" here.
 }

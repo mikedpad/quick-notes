@@ -1,0 +1,7 @@
+node_modules
+/build
+/.svelte-kit
+/package
+pnpm-lock.yaml
+src/data/notes.json
+src/styles/modern-normalize.css

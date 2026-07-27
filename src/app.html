@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="cerberus">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="description" content="The website for the actor Jay Padilla" />
+    <meta name="description" content="Offline-first markdown notes that live in your browser" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#293241" />
-    %svelte.head%
+    %sveltekit.head%
   </head>
 
-  <body>
-    %svelte.body%
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
   </body>
 </html>
