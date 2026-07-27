@@ -73,15 +73,38 @@ export type Scatter = {
 };
 
 /**
- * Derived from position rather than randomised: the wall looks hand-stuck, and
- * looks the same after a reload. `amount` is the user's scatter setting, so 0
- * squares everything up without a second code path.
+ * An integer hash, not a random number: the same position always produces the
+ * same value, so a note hangs the same way after a reload, but consecutive
+ * positions produce unrelated values rather than a pattern.
  */
-export function scatterAt(position: number, amount: number): Scatter {
-  const index = ((Math.trunc(position) % ROTATIONS.length) + ROTATIONS.length) % ROTATIONS.length;
+function hash(seed: number): number {
+  let h = Math.imul(seed ^ 0x9e3779b9, 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+/**
+ * Derived from position rather than randomised: the wall looks hand-stuck, and
+ * looks the same after a reload.
+ *
+ * `amount` is the user's scatter setting, so 0 squares everything up without a
+ * second code path. `variance` is how much notes are allowed to disagree about
+ * it: at 0 every note gets exactly `amount` and the ten-angle cycle shows
+ * through as a pattern; turned up, each note scales its own share somewhere in
+ * `1 ± variance`, so some hang almost straight and others hang badly. Rotation,
+ * drop and tape each draw from their own stream, because a note that is both
+ * steeply angled and far dropped looks deliberate rather than careless.
+ */
+export function scatterAt(position: number, amount: number, variance = 0): Scatter {
+  const step = ((Math.trunc(position) % ROTATIONS.length) + ROTATIONS.length) % ROTATIONS.length;
+  const seed = Math.trunc(position) * 3;
+  // Never negative: at variance 1 the factor bottoms out at 0, which is a note
+  // someone happened to stick up straight.
+  const vary = (stream: number) => 1 + (hash(seed + stream) * 2 - 1) * variance;
+
   return {
-    rotate: Number((ROTATIONS[index] * amount).toFixed(2)),
-    drop: Math.round(DROPS[index] * amount),
-    tapeRotate: ROTATIONS[(index + 3) % ROTATIONS.length],
+    rotate: Number((ROTATIONS[step] * amount * vary(0)).toFixed(2)),
+    drop: Math.round(DROPS[step] * amount * vary(1)),
+    tapeRotate: Number((ROTATIONS[(step + 3) % ROTATIONS.length] * vary(2)).toFixed(2)),
   };
 }

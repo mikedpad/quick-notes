@@ -15,17 +15,25 @@ export type WallSurface = (typeof WALL_SURFACES)[number];
 export type WallSettings = {
   surface: WallSurface;
   scatter: number;
+  /** How much notes are allowed to disagree about the scatter. */
+  variance: number;
   zoom: number;
   taped: boolean;
 };
 
-export const SCATTER_RANGE = { min: 0, max: 1.5, step: 0.1 } as const;
+/** What the options menu needs: the settings, and one way to put them all back. */
+export type WallControls = WallSettings & { reset(): void };
+
+export const SCATTER_RANGE = { min: 0, max: 2, step: 0.1 } as const;
+/** 0 hangs every note by the same rule; 1 lets each one take anywhere from none to double. */
+export const VARIANCE_RANGE = { min: 0, max: 1, step: 0.05 } as const;
 /** Up to double size: at the top of the slider a hovered note fills its neighbours. */
 export const ZOOM_RANGE = { min: 1, max: 2, step: 0.05 } as const;
 
 export const WALL_DEFAULTS: WallSettings = {
-  surface: 'plaster',
-  scatter: 0.7,
+  surface: 'cork',
+  scatter: 1.5,
+  variance: 0.5,
   zoom: 1.5,
   taped: true,
 };
@@ -63,6 +71,7 @@ export function parseSettings(raw: string | null): WallSettings {
   return {
     surface: isSurface(stored.surface) ? stored.surface : WALL_DEFAULTS.surface,
     scatter: number(stored.scatter, SCATTER_RANGE, WALL_DEFAULTS.scatter),
+    variance: number(stored.variance, VARIANCE_RANGE, WALL_DEFAULTS.variance),
     zoom: number(stored.zoom, ZOOM_RANGE, WALL_DEFAULTS.zoom),
     taped: typeof stored.taped === 'boolean' ? stored.taped : WALL_DEFAULTS.taped,
   };
@@ -90,6 +99,14 @@ class WallStore implements WallSettings {
   }
   set scatter(value: number) {
     this.#settings.scatter = clamp(value, SCATTER_RANGE.min, SCATTER_RANGE.max);
+    this.#save();
+  }
+
+  get variance(): number {
+    return this.#settings.variance;
+  }
+  set variance(value: number) {
+    this.#settings.variance = clamp(value, VARIANCE_RANGE.min, VARIANCE_RANGE.max);
     this.#save();
   }
 

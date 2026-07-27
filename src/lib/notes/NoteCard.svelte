@@ -20,7 +20,7 @@
   let { note, index, onedit, ondelete }: Props = $props();
 
   const paper = $derived(paperAt(paperIndex(note, index)));
-  const scatter = $derived(scatterAt(index, wall.scatter));
+  const scatter = $derived(scatterAt(index, wall.scatter, wall.variance));
   const body = $derived(renderMarkdown(note.body));
 
   const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' });

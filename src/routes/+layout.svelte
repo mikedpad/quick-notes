@@ -38,6 +38,19 @@
   {@render children()}
 </main>
 
+<!-- Written on the wall itself rather than on paper, so it stays out of the way
+     of the notes and follows whichever surface is up. -->
+<footer>
+  <span class="credit">
+    Stuck up by
+    <a href="https://github.com/mikedpad" target="_blank" rel="noopener noreferrer">mikedpad</a>
+    —
+    <a href="https://github.com/mikedpad/quick-notes" target="_blank" rel="noopener noreferrer">
+      source on GitHub
+    </a>
+  </span>
+</footer>
+
 <style>
   header {
     display: flex;
@@ -87,7 +100,39 @@
   main {
     max-width: 88rem;
     margin: 0 auto;
-    padding: 36px 40px 120px;
+    padding: 36px 40px 100px;
+  }
+
+  footer {
+    display: flex;
+    justify-content: center;
+    /* Clear of the new-note pad, which is fixed in the bottom-right corner. */
+    padding: 0 110px 40px;
+  }
+
+  .credit {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--wall-ink);
+    opacity: 0.6;
+    transform: rotate(-0.6deg);
+    text-align: center;
+  }
+
+  .credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .credit a:hover {
+    opacity: 1;
+    text-decoration-thickness: 2px;
+  }
+
+  .credit a:focus-visible {
+    outline: 2px solid var(--wall-ink);
+    outline-offset: 3px;
   }
 
   @media (width < 40rem) {
@@ -105,7 +150,18 @@
     }
 
     main {
-      padding: 28px 20px 110px;
+      padding: 28px 20px 90px;
+    }
+
+    /* The pad sits over the corner, so the credit gets the left of the line. */
+    footer {
+      justify-content: flex-start;
+      padding: 0 90px 32px 20px;
+    }
+
+    .credit {
+      font-size: 16px;
+      text-align: left;
     }
   }
 </style>

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   SCATTER_RANGE,
+  VARIANCE_RANGE,
   WALL_DEFAULTS,
   WALL_STORAGE_KEY,
   ZOOM_RANGE,
@@ -49,9 +50,17 @@ describe('parseSettings', () => {
   });
 
   it('reads back what was written', () => {
-    const settings = { surface: 'cork', scatter: 1.2, zoom: 1.35, taped: true };
+    const settings = { surface: 'cork', scatter: 1.2, variance: 0.3, zoom: 1.35, taped: true };
 
     expect(parseSettings(JSON.stringify(settings))).toEqual(settings);
+  });
+
+  it('gives a setting that predates this version its default', () => {
+    // Variance arrived after people already had preferences stored.
+    const stored = '{"surface":"charcoal","scatter":0.4,"zoom":1.1,"taped":false}';
+
+    expect(parseSettings(stored).variance).toBe(WALL_DEFAULTS.variance);
+    expect(parseSettings(stored).scatter).toBe(0.4);
   });
 
   it('survives a value that is not JSON at all', () => {
@@ -68,15 +77,21 @@ describe('parseSettings', () => {
   });
 
   it('clamps numbers to the range the controls offer', () => {
-    const settings = parseSettings('{"scatter":99,"zoom":-4}');
+    const settings = parseSettings('{"scatter":99,"zoom":-4,"variance":7}');
 
     expect(settings.scatter).toBe(SCATTER_RANGE.max);
     expect(settings.zoom).toBe(ZOOM_RANGE.min);
+    expect(settings.variance).toBe(VARIANCE_RANGE.max);
   });
 
   it('lets the zoom reach double size', () => {
     expect(parseSettings('{"zoom":2}').zoom).toBe(2);
     expect(parseSettings('{"zoom":2.5}').zoom).toBe(2);
+  });
+
+  it('lets the scatter reach the top of its widened range', () => {
+    expect(parseSettings('{"scatter":2}').scatter).toBe(2);
+    expect(parseSettings('{"scatter":3}').scatter).toBe(SCATTER_RANGE.max);
   });
 
   it('ignores values of the wrong type, field by field', () => {
@@ -100,11 +115,12 @@ describe('the wall store', () => {
     storage = stubStorage();
   });
 
-  it('starts on a taped plaster wall', () => {
+  it('starts on a taped cork wall', () => {
     const wall = createWallStore(storage);
 
-    expect(wall.surface).toBe('plaster');
-    expect(wall.scatter).toBe(0.7);
+    expect(wall.surface).toBe('cork');
+    expect(wall.scatter).toBe(1.5);
+    expect(wall.variance).toBe(0.5);
     expect(wall.zoom).toBe(1.5);
     expect(wall.taped).toBe(true);
   });
@@ -124,16 +140,18 @@ describe('the wall store', () => {
   it('writes every change through, so the next visit matches this one', () => {
     const wall = createWallStore(storage);
 
-    wall.surface = 'cork';
+    wall.surface = 'charcoal';
     wall.scatter = 1.1;
+    wall.variance = 0.25;
     wall.zoom = 1.4;
-    wall.taped = true;
+    wall.taped = false;
 
     expect(createWallStore(storage)).toMatchObject({
-      surface: 'cork',
+      surface: 'charcoal',
       scatter: 1.1,
+      variance: 0.25,
       zoom: 1.4,
-      taped: true,
+      taped: false,
     });
   });
 
@@ -142,34 +160,39 @@ describe('the wall store', () => {
 
     wall.scatter = 9;
     wall.zoom = 0;
+    wall.variance = -1;
 
     expect(wall.scatter).toBe(SCATTER_RANGE.max);
     expect(wall.zoom).toBe(ZOOM_RANGE.min);
+    expect(wall.variance).toBe(VARIANCE_RANGE.min);
   });
 
-  it('goes back to a bare wall on reset', () => {
+  it('puts everything back on reset, storage included', () => {
     const wall = createWallStore(storage);
-    wall.surface = 'cork';
-    wall.taped = true;
+    wall.surface = 'charcoal';
+    wall.scatter = 0;
+    wall.variance = 1;
+    wall.taped = false;
 
     wall.reset();
 
     expect(wall).toMatchObject(WALL_DEFAULTS);
-    expect(createWallStore(storage).surface).toBe('plaster');
+    // The reset has to be written, or the old wall comes back on reload.
+    expect(createWallStore(storage)).toMatchObject(WALL_DEFAULTS);
   });
 
   it('works with no storage at all, which is what prerender gets', () => {
     const wall = createWallStore();
 
-    wall.surface = 'cork';
+    wall.surface = 'charcoal';
 
-    expect(wall.surface).toBe('cork');
+    expect(wall.surface).toBe('charcoal');
   });
 
   it('forgets rather than breaks when storage refuses to co-operate', () => {
     const wall = createWallStore(hostileStorage());
 
-    expect(wall.surface).toBe('plaster');
+    expect(wall.surface).toBe('cork');
     expect(() => (wall.surface = 'charcoal')).not.toThrow();
     expect(wall.surface).toBe('charcoal');
   });

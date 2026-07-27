@@ -166,8 +166,8 @@ server-side, which is why `notes.init()` is kicked off from one in `+page.svelte
 
 ### The wall store
 
-`state/wall.svelte.ts` holds how the wall is hung — `{ surface, scatter, zoom, taped }` — in
-localStorage rather than in the repository. These are preferences: losing them costs the user
+`state/wall.svelte.ts` holds how the wall is hung — `{ surface, scatter, variance, zoom, taped }`
+— in localStorage rather than in the repository. These are preferences: losing them costs the user
 nothing, and they have no business syncing between devices that may not even have the same
 screen. `createWallStore(storage)` takes the storage so tests can hand it a stub; the singleton
 gets `localStorage` in the browser and nothing at all during prerender.
@@ -233,6 +233,15 @@ places, and that is the whole map:
   `--paper-*` custom properties so the gradient itself stays in the stylesheet) and
   `scatterAt`, which turns a position into an angle and a drop. Deterministic, so the wall
   looks hand-stuck and looks the same after a reload.
+
+  The angles come from a ten-long cycle, which on its own is visible as a pattern — every
+  tenth note hangs identically and they all lean by the same amount. `variance` is the second
+  input: each note hashes its position into a factor in `1 ± variance` and scales its own share
+  of the scatter by it, so some hang almost straight and others badly. Rotation, drop and tape
+  draw from separate streams, because a note that is both the most tilted and the most dropped
+  looks arranged rather than careless. A hash rather than a random number, so it survives a
+  reload; at `variance: 0` the arithmetic collapses back to exactly what it was before.
+
 - **Component `<style>` blocks** — everything else. A sticky note's gradient, tape, mask and
   hover lift belong next to its markup, not in a global sheet.
 
@@ -288,7 +297,7 @@ to the record, as `color` did.
 
 ## 6. Tests
 
-`pnpm test` — 163 tests across 8 files, Vitest in Node. `pnpm test:watch`,
+`pnpm test` — 172 tests across 8 files, Vitest in Node. `pnpm test:watch`,
 `pnpm test:coverage`.
 
 | File                              | Covers                                                       |

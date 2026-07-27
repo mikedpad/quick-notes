@@ -2,21 +2,22 @@
   import SlidersHorizontal from '@lucide/svelte/icons/sliders-horizontal';
   import {
     SCATTER_RANGE,
+    VARIANCE_RANGE,
     WALL_SURFACES,
     ZOOM_RANGE,
-    type WallSettings,
+    type WallControls,
     type WallSurface,
   } from '$lib/state/wall.svelte';
 
   /**
    * How the wall is hung, as a menu.
    *
-   * Presentational: it is handed something shaped like `WallSettings` and writes
+   * Presentational: it is handed something shaped like `WallControls` and writes
    * to it. Where those settings come from, and whether they outlive the tab, is
    * not its problem.
    */
   type Props = {
-    settings: WallSettings;
+    settings: WallControls;
   };
 
   let { settings }: Props = $props();
@@ -31,6 +32,9 @@
   let root = $state<HTMLDivElement>();
 
   const scatterLabel = $derived(settings.scatter === 0 ? 'tidy' : settings.scatter.toFixed(1));
+  const varianceLabel = $derived(
+    settings.variance === 0 ? 'even' : `±${Math.round(settings.variance * 100)}%`,
+  );
   const zoomLabel = $derived(`+${Math.round((settings.zoom - 1) * 100)}%`);
 </script>
 
@@ -92,6 +96,23 @@
         />
       </label>
 
+      <!-- How much notes are allowed to disagree about the scatter. Without it
+           the angles cycle, and a wall of evenly-crooked notes reads as a
+           pattern rather than as a mess. -->
+      <label class="field">
+        <span class="row">
+          <span class="name">Variance</span>
+          <span class="value">{varianceLabel}</span>
+        </span>
+        <input
+          type="range"
+          min={VARIANCE_RANGE.min}
+          max={VARIANCE_RANGE.max}
+          step={VARIANCE_RANGE.step}
+          bind:value={settings.variance}
+        />
+      </label>
+
       <label class="field">
         <span class="row">
           <span class="name">Hover zoom</span>
@@ -119,6 +140,9 @@
           <span class="knob"></span>
         </button>
       </div>
+
+      <!-- No confirmation: every setting here is one drag away from being put back. -->
+      <button type="button" class="reset" onclick={() => settings.reset()}> Start over </button>
     </div>
   {/if}
 </div>
@@ -278,9 +302,31 @@
     left: 25px;
   }
 
+  /* Set apart from the controls it undoes, and quiet enough not to invite a click. */
+  .reset {
+    align-self: flex-end;
+    margin-top: -4px;
+    border: 0;
+    background: transparent;
+    padding: 2px;
+    font-family: var(--font-hand);
+    font-size: 17px;
+    color: var(--color-ink);
+    opacity: 0.55;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .reset:hover {
+    opacity: 0.9;
+  }
+
   .trigger:focus-visible,
   .chip:focus-visible,
   .switch:focus-visible,
+  .reset:focus-visible,
   input[type='range']:focus-visible {
     outline: 2px solid var(--color-ink);
     outline-offset: 2px;
@@ -290,7 +336,8 @@
     .trigger,
     .chip,
     .switch,
-    .knob {
+    .knob,
+    .reset {
       transition: none;
     }
   }
