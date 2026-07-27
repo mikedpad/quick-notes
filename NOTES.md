@@ -361,10 +361,46 @@ Playwright suite if browser coverage should be permanent.
 
 ---
 
-## 8. Known gaps / next candidates
+## 8. Deployment
+
+The site is a GitHub Pages **project** site — `mikedpad.github.io/quick-notes/`, served from
+the `gh-pages` branch — which is the only interesting thing about deploying it. Three details
+follow from that subpath, and getting any of them wrong produces a blank page rather than an
+error:
+
+- **`paths.base`** in `svelte.config.js`. Every absolute URL SvelteKit emits needs the
+  `/quick-notes` prefix or it resolves against the user site and 404s. `vite dev` drops it;
+  `vite preview` keeps it, so preview serves the build the way Pages will.
+- **`static/.nojekyll`**. Pages runs output through Jekyll by default, and Jekyll discards
+  directories whose names start with an underscore — which is `_app`, the entire application.
+- **`fallback: '404.html'`**. Pages serves `404.html` for anything it cannot find, so that is
+  what the SPA fallback has to be called.
+
+Asset URLs inside the compiled CSS (fonts, wall textures) come out relative to the stylesheet,
+so they are unaffected by the base path either way.
+
+Publishing is manual — build, then replace the `gh-pages` branch with `build/`:
+
+```bash
+pnpm build
+git worktree add ../qn-pages --detach origin/gh-pages
+# replace everything in ../qn-pages with the contents of build/, then:
+git -C ../qn-pages add -A && git -C ../qn-pages commit -m "Deploy"
+git -C ../qn-pages push origin HEAD:gh-pages
+git worktree remove ../qn-pages
+```
+
+A GitHub Actions workflow doing the same on every push to `master` is the obvious next step;
+it would work against the current Pages setting without changing it.
+
+---
+
+## 9. Known gaps / next candidates
 
 - **No committed browser tests.** See §6.
-- **No deploy workflow.** `homepage` points at gh-pages but nothing publishes there.
+- **No deploy workflow.** Publishing is the manual sequence in §8.
+- **No favicon.** Browsers ask for `/favicon.ico` at the domain root and get a 404 — harmless,
+  and the one request the app makes that it cannot satisfy.
 - **Tombstones accumulate.** Nothing calls `purge`. Harmless at this scale; needs a compaction
   pass if it ever grows.
 - **No search or filter.** A title/body search would be a linear scan over the cached array,
