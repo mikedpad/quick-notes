@@ -1,8 +1,9 @@
 # Quick Notes — Architecture Notes
 
 Written during the 2026-07-26 restore-and-rearchitect, updated when the UI moved to Skeleton
-and notes became markdown. Describes how the app is built now, why it's shaped this way, and
-where to plug in a new art direction.
+and notes became markdown, and again on 2026-07-27 when the Post-It wall redesign landed.
+Describes how the app is built now, why it's shaped this way, and where to plug in a new art
+direction.
 
 **Fixed constraints:**
 
@@ -32,13 +33,20 @@ src/lib/
       memory.ts          prerender + tests
   state/
     notes.svelte.ts      runes-based reactive cache in front of the repo
+    wall.svelte.ts       wall preferences, persisted to localStorage
   ui/                    presentational, zero domain knowledge
     ConfirmDialog.svelte
+    WallOptions.svelte   the wall settings menu
+    paper.ts             the five papers and the scatter that pins them up
   notes/                 domain-aware
     NoteCard, NoteGrid, NoteEditor
     markdown.ts          markdown → sanitised HTML
+  assets/textures/       cork.png, charcoal.png — imported, so Vite hashes and bases them
+src/dev/
+  generateData.ts        pnpm generateData — the first-run sample notes
+  generateTexture.ts     pnpm generateTexture — the seamless charcoal tile
 src/styles/
-  app.css                Tailwind + Skeleton imports, theme, and markdown prose styling
+  app.css                design tokens, the three wall surfaces, markdown prose styling
 ```
 
 ### Why the `ui/` vs `notes/` split matters
@@ -95,12 +103,21 @@ type Note = {
   id: string; // crypto.randomUUID(), client-generated
   title: string;
   body: string; // markdown source
+  color?: number; // 0–4, which paper it is written on
   createdAt: string; // ISO 8601
   updatedAt: string; // ISO 8601 — doubles as the LWW clock
   deletedAt: string | null; // tombstone
   syncedAt: string | null; // null = local-only / pending push
 };
 ```
+
+`color` is optional rather than required, and that is deliberate: notes written before the
+redesign have no colour, and inventing one at read time would be a migration pretending to be
+a default. `paperIndex(note, position)` resolves it — the note's own colour if it has one, its
+place on the wall modulo five if it doesn't. New notes always carry one (the editor's swatches
+write it), and `loadSeed()` deals them round-robin so a seeded wall keeps its colours when
+notes are added above it. No `DB_VERSION` bump: the field adds no index, and IndexedDB does
+not mind a record shape that grew.
 
 Each field is load-bearing for the "sync later without a migration" goal:
 
@@ -147,6 +164,27 @@ the user just typed.
 adapter during the prerender pass and the shell renders empty. `$effect` never runs
 server-side, which is why `notes.init()` is kicked off from one in `+page.svelte`.
 
+### The wall store
+
+`state/wall.svelte.ts` holds how the wall is hung — `{ surface, scatter, zoom, taped }` — in
+localStorage rather than in the repository. These are preferences: losing them costs the user
+nothing, and they have no business syncing between devices that may not even have the same
+screen. `createWallStore(storage)` takes the storage so tests can hand it a stub; the singleton
+gets `localStorage` in the browser and nothing at all during prerender.
+
+Two things there are load-bearing:
+
+- **Everything read back is validated.** `parseSettings` treats the stored string as untrusted
+  input — bad JSON, a surface this version has never heard of, a scatter of `"lots"` — and
+  falls back field by field rather than all-or-nothing.
+- **Storage failures are swallowed.** Safari's private mode throws on `setItem` rather than
+  returning. A wall that forgets is fine; a wall that throws is not.
+
+The surface is applied to `<html data-wall>`, and `app.html` carries a pre-paint script that
+reads the same key. Without it, every load of a charcoal wall starts with a plaster flash,
+because the page is prerendered with the default. That script and `WALL_STORAGE_KEY` are the
+one piece of duplication in the app — both are commented as such.
+
 ---
 
 ## 4. Markdown
@@ -171,52 +209,86 @@ there is nothing in a note that can load a remote resource or break the card lay
 once and expect a new line, not a continuation of the paragraph.
 
 Prose styling lives in one `.note-prose` block in `app.css`, which is the only place tags we
-don't author get styled. It sets spacing and rhythm; every colour still resolves through the
-Skeleton theme.
+don't author get styled. It sets spacing and rhythm in `em`, so a sticky note sets the scale
+and everything the parser emitted follows.
 
 ---
 
-## 5. Reskinning: where a new art direction plugs in
+## 5. The Post-It wall
 
-### The theme is the seam
+The art direction is paper: coloured squares scattered on a textured wall, handwritten, taped
+up, lifted on hover. It replaced the Skeleton card grid on 2026-07-27.
 
-The UI is Tailwind 4 + [Skeleton 5](https://skeleton.dev). Components use Skeleton's semantic
-colour roles (`primary`, `secondary`, `surface`, `success`, `warning`, `error`) and its
-utilities (`card`, `btn`, `btn-icon`, `input`, `textarea`, `dialog`, `preset-filled-*`,
-`preset-tonal-*`) — never a literal colour.
+### Where the design lives
 
-Switching the whole art direction is one attribute:
+Skeleton and its `cerberus` theme are still imported — the resets and form/dialog base are
+worth keeping — but nothing renders through its palette any more. The design is in three
+places, and that is the whole map:
 
-```html
-<html lang="en" data-theme="cerberus"></html>
-```
+- **`styles/app.css`** — the tokens. `--font-hand` (Caveat) and `--font-note` (Kalam),
+  `--color-ink`, `--color-crimson`, the three shadows, and the three wall surfaces keyed off
+  `:root[data-wall]`. These are unlayered on purpose, so they win against Skeleton's
+  `@layer base` without a specificity fight.
+- **`ui/paper.ts`** — the five papers (each a light/base/shade triple, handed to CSS as
+  `--paper-*` custom properties so the gradient itself stays in the stylesheet) and
+  `scatterAt`, which turns a position into an angle and a drop. Deterministic, so the wall
+  looks hand-stuck and looks the same after a reload.
+- **Component `<style>` blocks** — everything else. A sticky note's gradient, tape, mask and
+  hover lift belong next to its markup, not in a global sheet.
 
-Skeleton ships 24 themes (`cerberus`, `mona`, `vox`, `catppuccin`, `rose`, `terminus`,
-`vintage`, `wintry`, …). Register more by adding imports in `app.css`:
+Fonts are self-hosted via fontsource. The app is offline-first; a wall that only has its
+handwriting when a CDN is reachable is not.
 
-```css
-@import '@skeletonlabs/skeleton/themes/mona';
-```
+### The charcoal wall is generated, not photographed
 
-A bespoke theme is a CSS block defining the same custom properties — see any file in
-`node_modules/@skeletonlabs/skeleton/src/themes/` for the full surface.
+It started as an 838 kB photographic texture stretched over the viewport. `pnpm
+generateTexture` (`src/dev/generateTexture.ts`) writes a 14 kB seamless 256 px tile instead —
+value noise on a wrapping lattice, so it tiles by construction rather than by mirroring, and
+centred on mid-grey.
 
-Light and dark both work without a toggle: Skeleton uses `light-dark()` and pairing utilities
-(`bg-surface-100-900` = shade 100 in light, 900 in dark), so the theme follows the OS setting.
+`app.css` lays that one tile down twice, at 317 px and 613 px, and composites both in
+`soft-light` over a gradient. Two coprime scales is what stops a repeating texture from reading
+as one: their patterns only line up again every few thousand pixels. Blending rather than
+covering means the wall's colour still lives in the stylesheet, so it can be recoloured without
+touching the image.
+
+### The editor's gestures
+
+Three ways in and four ways out, all routed through the same dirty-check guard:
+
+- **In:** the pencil button, or a double-click anywhere on the note. Single clicks stay inert
+  so the wall can be read without setting anything off.
+- **Out:** the X, Escape, Cancel, or a click off the note. The outside click only counts when
+  the press _and_ the release both landed outside — otherwise a text selection dragged out of
+  the textarea, or a resize that overshoots, would dismiss the note mid-gesture.
+- **Resize:** drag either edge. The sheet is centred by `margin: auto`, so it grows away from
+  its middle in both directions at once, and an edge only keeps up with the cursor if the
+  height changes by _twice_ the distance dragged. The handles are buttons, so arrow keys do
+  the same job — which the textarea's old resize corner never offered.
+
+### Gotchas worth knowing before editing it
+
+- **Tailwind's preflight zeroes `margin`**, including the `margin: auto` a modal `<dialog>` is
+  centred by. Both dialogs set it back explicitly. Remove that line and they jump to the
+  top-left corner.
+- **A rotated element is its own stacking context**, so `z-index: -1` on a pseudo-element
+  cannot get underneath its parent's background. The new-note pad paints its top sheet as a
+  child layer for exactly this reason.
+- **`{@html}` output cannot be scoped** by Svelte, which is why `.note-prose` is global.
 
 ### What to expect when swapping in a new design
 
-If a component needs editing to accommodate a colour or spacing change, that's a gap in the
-theme's coverage, not something to work around — say so and it gets widened. A genuinely
-different _layout_ (a masonry board, a sidebar editor) means editing `notes/NoteGrid.svelte`
-and `notes/NoteEditor.svelte`, which is the intended place for it. `domain/`, `data/` and
-`state/` should not need to change for any visual work at all.
+A different palette or type scale is `app.css` plus `ui/paper.ts`. A different _layout_ (a
+masonry board, a sidebar editor) means editing `notes/NoteGrid.svelte` and
+`notes/NoteEditor.svelte`, which is the intended place for it. `domain/`, `data/` and `state/`
+should not need to change for visual work — the one exception being anything that adds a field
+to the record, as `color` did.
 
 ---
 
 ## 6. Tests
 
-`pnpm test` — 121 tests across 6 files, Vitest in Node. `pnpm test:watch`,
+`pnpm test` — 163 tests across 8 files, Vitest in Node. `pnpm test:watch`,
 `pnpm test:coverage`.
 
 | File                              | Covers                                                       |
@@ -225,9 +297,14 @@ and `notes/NoteEditor.svelte`, which is the intended place for it. `domain/`, `d
 | `data/repo.contract.ts`           | the shared spec — not a test file itself                     |
 | `data/adapters/memory.test.ts`    | contract + construction/isolation                            |
 | `data/adapters/indexeddb.test.ts` | contract + schema, connection reuse, durability, rejection   |
-| `data/seed.test.ts`               | generator-to-domain mapping                                  |
+| `data/seed.test.ts`               | generator-to-domain mapping, paper round-robin               |
 | `state/notes.svelte.test.ts`      | init/seed, sorting, add/update/remove, error paths           |
+| `state/wall.svelte.test.ts`       | preference parsing, clamping, persistence, hostile storage   |
 | `notes/markdown.test.ts`          | rendering + sanitising (XSS, images, iframes, `javascript:`) |
+| `ui/paper.test.ts`                | palette wrapping, deterministic scatter                      |
+
+Presentation is still covered by eye rather than by assertions — `paper.ts` is in the suite
+because it is arithmetic the whole wall is built on, not because it is CSS.
 
 ### The contract spec is the important part
 
@@ -246,12 +323,21 @@ exercise actual transaction and upgrade handling rather than mocks.
 ### Browser verification
 
 Runtime behaviour is checked separately by driving headless Chrome over CDP against
-`pnpm preview`: **25/25 on a clean database** — seeding, markdown rendering of every construct,
-live preview, XSS neither rendering nor executing, storage holding markdown _source_,
-persistence across reloads, edit pre-fill, the nested discard guard, and delete writing a
-tombstone rather than dropping the row.
+`pnpm preview`: seeding, markdown rendering of every construct, XSS neither rendering nor
+executing, storage holding markdown _source_, persistence across reloads, edit pre-fill, the
+nested discard guard, and delete writing a tombstone rather than dropping the row.
 
-That script is **not committed** — it lives in the scratch directory. Worth landing as a
+Re-run for the redesign, covering what the wall added: the three surfaces, preferences
+surviving a reload (and applying before first paint), scatter and tape reaching the notes, both
+dialogs centred, a new note keeping the paper it was written on, and 414 px wide without
+horizontal overflow.
+
+Re-run again for the editor's gestures, which are the part least likely to survive a refactor
+unnoticed: single click inert, double click opening, an edge drag moving the sheet by twice the
+cursor's travel, an outside click dismissing a clean note but stopping a dirty one at the
+guard, and a selection dragged off the note leaving it open.
+
+Those scripts are **not committed** — they live in the scratch directory. Worth landing as a
 Playwright suite if browser coverage should be permanent.
 
 ---
@@ -260,7 +346,7 @@ Playwright suite if browser coverage should be permanent.
 
 - **Notes persist.** The form used to POST to `/` on a static host, which discarded the input.
 - **Edit and delete exist.** Hover or focus a card to reveal its actions.
-- **Notes are markdown**, with a Write/Preview toggle in the editor.
+- **Notes are markdown.** The editor writes source; the wall renders it.
 - **`Modal` is no longer a global singleton.** It was driven by a module-level `modalOpen`
   store, so every `<Modal>` shared one boolean. Dialogs are now native `<dialog>` +
   `showModal()`, which brings a real focus trap, inert background, Esc handling and
@@ -283,11 +369,18 @@ Playwright suite if browser coverage should be permanent.
   pass if it ever grows.
 - **No search or filter.** A title/body search would be a linear scan over the cached array,
   fine for hundreds of notes.
-- **Card actions are hover/focus-revealed**, which is weak on touch.
-- **Cards are a fixed height with internal scroll.** Long notes are readable but clipped; a
-  masonry layout or a read view would suit markdown better.
-- **No theme switcher.** Changing `data-theme` is a source edit; exposing it in the UI is a
-  small job once the art direction settles.
+- **Note actions are hover/focus-revealed**, which is weak on touch — a tap reveals them, but
+  only because the first tap counts as a hover. Worth an explicit tap-to-open read view.
+- **No Write/Preview toggle.** The redesign's editor is a single sheet of ruled paper, so
+  markdown is authored without a live preview. The card is the preview.
+- **Notes are square and clip.** Long ones fade out under a mask rather than scrolling; there
+  is no read view to open them into yet, which is the other half of the point above.
+- **`WALL_STORAGE_KEY` is duplicated** in the `app.html` pre-paint script. Unavoidable without
+  giving up the flash-free first paint; both sides are commented.
+- **`cork.png` is 169 kB** and still the largest asset, ten times the size of the charcoal
+  tile it sits beside. It is a 512 px tile that could get the same treatment.
+- **Double-click to open is pointer-only.** The pencil button covers keyboard and screen
+  readers, but there is no touch equivalent of a double-click on a note.
 
 ---
 

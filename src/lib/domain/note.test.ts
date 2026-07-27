@@ -1,12 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   EMPTY_DRAFT,
+  PAPER_COUNT,
   byNewest,
   createNote,
   deleteNote,
   editNote,
   isLive,
   isValid,
+  paperIndex,
   toDraft,
   validateDraft,
   type Note,
@@ -142,6 +144,57 @@ describe('deleteNote', () => {
   });
 });
 
+describe('colour', () => {
+  it('keeps the paper the draft was written on', () => {
+    expect(createNote({ ...draft(), color: 3 }).color).toBe(3);
+  });
+
+  it('leaves a note that never picked one without a colour', () => {
+    expect(createNote(draft()).color).toBeUndefined();
+  });
+
+  it('changes paper on edit', () => {
+    const note = createNote({ ...draft(), color: 1 });
+
+    expect(editNote(note, { ...draft('Changed'), color: 4 }).color).toBe(4);
+  });
+
+  it('leaves the note on its own paper when the draft says nothing', () => {
+    const note = createNote({ ...draft(), color: 1 });
+
+    expect(editNote(note, draft('Changed')).color).toBe(1);
+  });
+});
+
+describe('paperIndex', () => {
+  it('uses the note’s own colour wherever it hangs', () => {
+    const note = { ...createNote(draft()), color: 4 };
+
+    expect(paperIndex(note, 0)).toBe(4);
+    expect(paperIndex(note, 12)).toBe(4);
+  });
+
+  it('falls back to position for a note stored before colours existed', () => {
+    const legacy = createNote(draft());
+
+    expect(paperIndex(legacy, 0)).toBe(0);
+    expect(paperIndex(legacy, 6)).toBe(1);
+  });
+
+  it('cycles the fallback through every paper, so neighbours differ', () => {
+    const legacy = createNote(draft());
+    const walk = Array.from({ length: PAPER_COUNT * 2 }, (_, i) => paperIndex(legacy, i));
+
+    expect(walk).toEqual([0, 1, 2, 3, 4, 0, 1, 2, 3, 4]);
+  });
+
+  it('keeps a deliberate colour of zero rather than treating it as missing', () => {
+    const note = { ...createNote(draft()), color: 0 };
+
+    expect(paperIndex(note, 3)).toBe(0);
+  });
+});
+
 describe('isLive', () => {
   it('accepts a note with no tombstone', () => {
     expect(isLive(createNote(draft()))).toBe(true);
@@ -154,14 +207,20 @@ describe('isLive', () => {
 
 describe('toDraft', () => {
   it('round-trips through createNote unchanged', () => {
-    const original = draft('Title', 'Body');
+    const original = { ...draft('Title', 'Body'), color: 3 };
     const note = createNote(original);
 
     expect(toDraft(note)).toEqual(original);
   });
 
   it('exposes only the editable fields', () => {
-    expect(Object.keys(toDraft(createNote(draft()))).sort()).toEqual(['body', 'title']);
+    expect(Object.keys(toDraft(createNote(draft()))).sort()).toEqual(['body', 'color', 'title']);
+  });
+
+  it('resolves the paper of a note that has none, so the editor opens on it', () => {
+    const legacy = createNote(draft());
+
+    expect(toDraft(legacy, 7).color).toBe(2);
   });
 });
 

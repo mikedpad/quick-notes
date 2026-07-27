@@ -11,6 +11,11 @@ export type Note = {
   title: string;
   /** Markdown source. Stored as written; rendered to HTML only at display time. */
   body: string;
+  /**
+   * Which paper the note is written on, 0–4. Optional because notes written
+   * before the wall had colours carry none — see `paperIndex`.
+   */
+  color?: number;
   /** ISO 8601. Stored as strings so JSON, IndexedDB and HTTP all agree. */
   createdAt: string;
   /** ISO 8601. Doubles as the last-write-wins clock if sync is ever added. */
@@ -25,9 +30,24 @@ export type Note = {
 export type NoteDraft = {
   title: string;
   body: string;
+  /** Omitted by callers that do not care which paper is used. */
+  color?: number;
 };
 
 export const EMPTY_DRAFT: NoteDraft = { title: '', body: '' };
+
+/** How many papers the wall is stocked with. `Note.color` indexes into them. */
+export const PAPER_COUNT = 5;
+
+/**
+ * Which paper a note is on.
+ *
+ * Notes stored before colours existed have none, so their place on the wall
+ * picks one: deterministic, stable for as long as the note keeps its position,
+ * and varied enough that neighbours differ.
+ */
+export const paperIndex = (note: Note, position: number): number =>
+  note.color ?? position % PAPER_COUNT;
 
 const now = () => new Date().toISOString();
 
@@ -43,6 +63,7 @@ export function createNote(draft: NoteDraft): Note {
     id: newId(),
     title: draft.title.trim(),
     body: draft.body.trim(),
+    color: draft.color,
     createdAt: timestamp,
     updatedAt: timestamp,
     deletedAt: null,
@@ -55,6 +76,8 @@ export function editNote(note: Note, draft: NoteDraft): Note {
     ...note,
     title: draft.title.trim(),
     body: draft.body.trim(),
+    // A draft that says nothing about colour leaves the note on its own paper.
+    color: draft.color ?? note.color,
     updatedAt: now(),
     syncedAt: null,
   };
@@ -68,7 +91,15 @@ export function deleteNote(note: Note): Note {
 
 export const isLive = (note: Note): boolean => note.deletedAt === null;
 
-export const toDraft = (note: Note): NoteDraft => ({ title: note.title, body: note.body });
+/**
+ * The editor opens on the paper the note is already on, which for an older note
+ * means the one its position resolved to — hence `position`.
+ */
+export const toDraft = (note: Note, position = 0): NoteDraft => ({
+  title: note.title,
+  body: note.body,
+  color: paperIndex(note, position),
+});
 
 /** Newest first. */
 export const byNewest = (a: Note, b: Note): number => b.updatedAt.localeCompare(a.updatedAt);

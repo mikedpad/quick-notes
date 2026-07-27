@@ -1,9 +1,23 @@
 <!doctype html>
-<html lang="en" data-theme="cerberus">
+<html lang="en" data-theme="cerberus" data-wall="plaster">
   <head>
     <meta charset="utf-8" />
     <meta name="description" content="Offline-first markdown notes that live in your browser" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // The wall surface is a stored preference, and the page is prerendered
+      // with the default one. Applying it before the first paint is the
+      // difference between opening onto a charcoal wall and opening onto a
+      // white flash. Kept in sync by hand with `state/wall.svelte.ts`.
+      try {
+        const stored = JSON.parse(localStorage.getItem('quick-notes:wall') ?? '{}');
+        if (['plaster', 'cork', 'charcoal'].includes(stored.surface)) {
+          document.documentElement.dataset.wall = stored.surface;
+        }
+      } catch {
+        /* no storage, no preference — the default in the markup stands */
+      }
+    </script>
     %sveltekit.head%
   </head>
 

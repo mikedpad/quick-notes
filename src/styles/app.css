@@ -1,10 +1,14 @@
 /**
  * The whole stylesheet.
  *
- * Everything visual comes from Tailwind utilities and Skeleton's design system.
- * The art direction lives in the theme imported below — swapping the
- * `data-theme` value in `src/app.html` for any other registered theme restyles
- * the entire app without touching a component.
+ * Two things live here and nothing else: the tokens the Post-It wall is drawn
+ * from (fonts, ink, wall surfaces), and the styling of markup we do not author
+ * — rendered markdown. Every sticky note, dialog and control keeps its own CSS
+ * next to its own markup, which is where a component's art direction belongs.
+ *
+ * Skeleton is still imported for its resets and form/dialog base, but the wall
+ * takes over from the theme's palette entirely: this design is paper under a
+ * lamp, not a light/dark colour scheme.
  */
 
 @import 'tailwindcss';
@@ -12,37 +16,131 @@
 @import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/cerberus';
 
+/* Self-hosted, because the app is offline-first — a wall that only has its
+   handwriting when the CDN is reachable is not offline-first. */
+@import '@fontsource-variable/caveat/index.css';
+@import '@fontsource/kalam/latin-300.css';
+@import '@fontsource/kalam/latin-400.css';
+
 /* Skeleton's Svelte components ship their own markup, so Tailwind has to scan
    them to emit the utilities they reference. */
 @source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
+@theme {
+  /* Caveat for anything hand-lettered: titles, labels, dates, buttons. */
+  --font-hand: 'Caveat Variable', Caveat, cursive;
+  /* Kalam for anything hand-written: note bodies, help text. */
+  --font-note: Kalam, cursive;
+
+  /** Every mark on the wall is made in the same pen. */
+  --color-ink: oklch(0.3 0.015 80);
+  /** The one exception: deleting is the only thing written in red. */
+  --color-crimson: oklch(0.45 0.16 28);
+  /** Paper white, for text sitting on ink. */
+  --color-paper: #fffef8;
+
+  --shadow-note: 0 1px 2px rgb(0 0 0 / 0.08), 0 12px 18px -8px rgb(0 0 0 / 0.32);
+  --shadow-note-lifted: 0 2px 4px rgb(0 0 0 / 0.12), 0 22px 30px -10px rgb(0 0 0 / 0.4);
+  --shadow-sheet: 0 3px 6px rgb(0 0 0 / 0.15), 0 24px 40px -12px rgb(0 0 0 / 0.45);
+}
+
+/**
+ * The three wall surfaces.
+ *
+ * `data-wall` is set on `<html>` rather than on a wrapper element for two
+ * reasons: the browser paints the root's background behind an overscroll
+ * bounce, and `background-attachment: fixed` wants the viewport rather than a
+ * scrolling box. `--wall-ink` is the only colour that has to answer to the
+ * surface — the scribbles written directly on it, which on charcoal have to be
+ * chalk rather than pencil.
+ *
+ * Deliberately unlayered so these win against Skeleton's `@layer base` without
+ * an arms race of specificity.
+ */
+:root {
+  --wall: radial-gradient(
+    120% 90% at 50% 0%,
+    oklch(0.955 0.012 90) 0%,
+    oklch(0.925 0.014 88) 55%,
+    oklch(0.89 0.018 85) 100%
+  );
+  --wall-ink: oklch(0.35 0.02 80);
+  /* Only charcoal composites its layers; everything else stacks them plainly. */
+  --wall-blend: normal;
+  /* The papers are always light, whatever the OS thinks, so native controls
+     (range thumbs, scrollbars, the caret) should be too. */
+  color-scheme: light;
+}
+
+:root[data-wall='cork'] {
+  --wall: url('../lib/assets/textures/cork.png') repeat top left / 340px auto fixed, #b08a58;
+  --wall-ink: oklch(0.24 0.03 65);
+}
+
+/**
+ * Charcoal is built rather than photographed: one 14 kB seamless tile
+ * (`pnpm generateTexture`) laid down twice at two coprime scales and blended
+ * into a gradient. The two scales are what stop a repeating texture from
+ * reading as one — their pattern only lines up every few thousand pixels — and
+ * `soft-light` lets the tile modulate the gradient's colour instead of
+ * replacing it, so the palette stays here in the stylesheet.
+ */
+:root[data-wall='charcoal'] {
+  --wall:
+    url('../lib/assets/textures/charcoal.png') repeat top left / 317px auto fixed,
+    url('../lib/assets/textures/charcoal.png') repeat top left / 613px auto fixed,
+    radial-gradient(
+      130% 95% at 50% 0%,
+      oklch(0.33 0.014 260) 0%,
+      oklch(0.25 0.012 260) 55%,
+      oklch(0.19 0.01 262) 100%
+    );
+  --wall-blend: soft-light, soft-light, normal;
+  --wall-ink: oklch(0.92 0.01 90);
+}
+
+html {
+  background: var(--wall);
+  background-blend-mode: var(--wall-blend);
+}
+
+body {
+  /* The wall is on <html>; a second background here would paint over it. */
+  background: none;
+  min-height: 100vh;
+  color: var(--color-ink);
+  font-family: var(--font-note);
+  overflow-x: hidden;
+}
+
 /**
  * Rendered markdown is the one place we style tags we do not author, since the
- * HTML comes from the parser rather than from a template. Kept to spacing and
- * rhythm; every colour still resolves through the theme.
+ * HTML comes from the parser rather than from a template. Sizes are in `em` so
+ * a note body sets its own scale and everything inside follows.
  */
 @layer components {
   .note-prose {
     :where(h1, h2, h3, h4, h5, h6) {
+      font-family: var(--font-hand);
       font-weight: 700;
-      line-height: 1.25;
-      margin-block: 0.75em 0.35em;
+      line-height: 1.15;
+      margin-block: 0.5em 0.2em;
     }
     :where(h1) {
-      font-size: 1.25rem;
+      font-size: 1.5em;
     }
     :where(h2) {
-      font-size: 1.15rem;
+      font-size: 1.35em;
     }
     :where(h3, h4, h5, h6) {
-      font-size: 1rem;
+      font-size: 1.2em;
     }
     :where(p) {
-      margin-block: 0.6em;
+      margin-block-end: 0.55em;
     }
     :where(ul, ol) {
-      margin-block: 0.6em;
-      padding-inline-start: 1.4em;
+      margin-block: 0.4em;
+      padding-inline-start: 1.3em;
     }
     :where(ul) {
       list-style: disc;
@@ -51,41 +149,42 @@
       list-style: decimal;
     }
     :where(li) {
-      margin-block: 0.2em;
+      margin-block: 0.15em;
     }
     :where(a) {
       text-decoration: underline;
       text-underline-offset: 2px;
     }
     :where(code) {
-      font-size: 0.875em;
+      font-family: ui-monospace, monospace;
+      font-size: 0.85em;
       padding: 0.1em 0.35em;
-      border-radius: var(--radius-base);
-      background-color: color-mix(in oklab, currentColor 12%, transparent);
+      border-radius: 2px;
+      background-color: rgb(0 0 0 / 0.06);
     }
     :where(pre) {
-      font-size: 0.875em;
+      font-size: 0.85em;
       overflow-x: auto;
-      padding: 0.75em;
-      margin-block: 0.6em;
-      border-radius: var(--radius-container);
-      background-color: color-mix(in oklab, currentColor 10%, transparent);
+      padding: 0.6em;
+      margin-block: 0.5em;
+      border-radius: 2px;
+      background-color: rgb(0 0 0 / 0.06);
     }
     :where(pre) :where(code) {
       padding: 0;
       background: none;
     }
     :where(blockquote) {
-      margin-block: 0.6em;
-      padding-inline-start: 0.9em;
-      border-inline-start: 3px solid color-mix(in oklab, currentColor 30%, transparent);
-      opacity: 0.9;
+      margin-block: 0.5em;
+      padding-inline-start: 0.8em;
+      border-inline-start: 2px solid rgb(0 0 0 / 0.2);
+      opacity: 0.85;
     }
     :where(hr) {
-      margin-block: 1em;
-      border-color: color-mix(in oklab, currentColor 20%, transparent);
+      margin-block: 0.8em;
+      border-color: rgb(0 0 0 / 0.15);
     }
-    /* First and last children sit flush so cards stay evenly padded. */
+    /* First and last children sit flush so notes stay evenly padded. */
     > :first-child {
       margin-block-start: 0;
     }
