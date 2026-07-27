@@ -379,6 +379,15 @@ error:
 Asset URLs inside the compiled CSS (fonts, wall textures) come out relative to the stylesheet,
 so they are unaffected by the base path either way.
 
+### The service worker tombstone
+
+`static/service-worker.js` exists only to undo the one the 2020 Create React App build left
+registered in visitors' browsers. Deleting a worker from the server does not unregister it, and
+a failed update fetch leaves the existing one in place — so without this, anyone who saw the
+React version would go on being served it from cache regardless of what is deployed. The
+replacement keeps the old file's name, unregisters itself, empties every cache and reloads the
+page. It can be deleted once returning visitors have plausibly all been through.
+
 Publishing is manual — build, then replace the `gh-pages` branch with `build/`:
 
 ```bash
