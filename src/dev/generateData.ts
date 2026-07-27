@@ -1,44 +1,55 @@
+/**
+ * Regenerates the first-run sample notes: `pnpm generateData`.
+ *
+ * Build-time authoring tool, not application code. It deliberately declares its
+ * own output shape rather than importing the domain model, so the generator and
+ * the storage schema can change independently — `$lib/data/seed.ts` is the
+ * single place that maps between them.
+ */
 import * as fs from 'fs';
-import type { Note } from '$types/types';
 import { faker } from '@faker-js/faker';
-import { nanoid } from 'nanoid';
+
+type SeedNote = {
+  id: string;
+  title: string;
+  content: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+const OUTPUT = './src/lib/data/seed.json';
+const COUNT = 33;
 
 const random = (range: number, min = 1): number => Math.floor(Math.random() * range + min);
 
 const createName = (): string => {
-  const val = random(3);
-  switch (val) {
+  switch (random(3)) {
     case 1:
-      return faker.name.gender();
+      return faker.person.gender();
     case 2:
-      return faker.company.companyName();
-    case 3:
-      return `${faker.name.prefix()} ${faker.name.lastName()}`;
+      return faker.company.name();
+    default:
+      return `${faker.person.prefix()} ${faker.person.lastName()}`;
   }
 };
 
 const createTitle = (): string => {
-  const val = random(3);
-  switch (val) {
+  switch (random(3)) {
     case 1:
       return `${createName()} ${faker.hacker.verb()}`;
     case 2:
       return faker.hacker.phrase();
-    case 3:
-      return `${createName()} ${faker.hacker.verb()}s ${faker.random.word()}`;
     default:
-      return `bummer`;
+      return `${createName()} ${faker.hacker.verb()}s ${faker.word.sample()}`;
   }
 };
 
-function createContent(): string[] {
-  return faker.lorem.paragraphs(random(6, 3)).split('\n \r');
-}
+const createContent = (): string[] => faker.lorem.paragraphs({ min: 3, max: 8 }, '\n').split('\n');
 
-const createNote = (): Note => {
-  const date = faker.date.past(5);
+const createNote = (): SeedNote => {
+  const date = faker.date.past({ years: 5 }).toISOString();
   return {
-    id: nanoid(),
+    id: crypto.randomUUID(),
     title: createTitle(),
     content: createContent(),
     createdAt: date,
@@ -46,8 +57,7 @@ const createNote = (): Note => {
   };
 };
 
-const notes: Note[] = Array.from({ length: 33 }).map(() => createNote());
+const notes: SeedNote[] = Array.from({ length: COUNT }, createNote);
 
-const fileName = './src/data/notes.json';
-const jsonData = JSON.stringify(notes, null, 2);
-fs.writeFileSync(fileName, jsonData);
+fs.writeFileSync(OUTPUT, `${JSON.stringify(notes, null, 2)}\n`);
+console.log(`Wrote ${notes.length} notes to ${OUTPUT}`);

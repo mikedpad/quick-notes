@@ -1,52 +1,96 @@
-@import './modern-normalize.css';
-@import '@fontsource/roboto-mono/variable.css';
-@import '@fontsource/roboto-mono/400.css';
-@import '@fontsource/roboto/300.css';
-@import '@fontsource/roboto/400.css';
-@import '@fontsource/roboto/500.css';
-@import '@fontsource/roboto/700.css';
-/* @import '@fontsource/material-icons'; */
+/**
+ * The whole stylesheet.
+ *
+ * Everything visual comes from Tailwind utilities and Skeleton's design system.
+ * The art direction lives in the theme imported below — swapping the
+ * `data-theme` value in `src/app.html` for any other registered theme restyles
+ * the entire app without touching a component.
+ */
 
-:root {
-  --default-font: 'Roboto', 'Open Sans', 'Source Sans Pro', 'Helvetica Neue', system-ui,
-    -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --default-monospace-font: 'Roboto MonoVariable', 'Roboto Mono', Menlo, Consolas, Courier,
-    monospace;
+@import 'tailwindcss';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
+@import '@skeletonlabs/skeleton/themes/cerberus';
 
-  /* CSS HEX */
-  --bdazzled-blue: #3d5a80;
-  --dark-sky-blue: #98c1d9;
-  --alice-blue: #eff7fa;
-  --light-cyan: #e0fbfc;
-  --cream: #feffc2;
-  --anti-cream: #e5e6ae;
-  --burnt-sienna: #ee6c4d;
-  --gunmetal: #293241;
+/* Skeleton's Svelte components ship their own markup, so Tailwind has to scan
+   them to emit the utilities they reference. */
+@source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
-  --color-fg: var(--gunmetal);
-  --color-bg: var(--light-cyan);
-  --default-button: #203131;
-  --default-shadow: 1px 2px 2px 0 rgb(0 0 0 / 30%);
-
-  --header-fg-color: var(--alice-blue);
-  --header-bg-color: var(--gunmetal);
-  --note-width: 300px;
-
-  color: var(--color);
-  background-color: var(--bgColor);
-  font-family: var(--default-font);
-}
-
-body {
-  background-color: var(--color-bg);
-  color: var(--color-fg);
-  margin: 0;
-  padding: 0;
-  font-family: var(--default-font);
-  text-rendering: geometricPrecision;
-}
-
-pre,
-code {
-  font-family: var(--default-monospace-font);
+/**
+ * Rendered markdown is the one place we style tags we do not author, since the
+ * HTML comes from the parser rather than from a template. Kept to spacing and
+ * rhythm; every colour still resolves through the theme.
+ */
+@layer components {
+  .note-prose {
+    :where(h1, h2, h3, h4, h5, h6) {
+      font-weight: 700;
+      line-height: 1.25;
+      margin-block: 0.75em 0.35em;
+    }
+    :where(h1) {
+      font-size: 1.25rem;
+    }
+    :where(h2) {
+      font-size: 1.15rem;
+    }
+    :where(h3, h4, h5, h6) {
+      font-size: 1rem;
+    }
+    :where(p) {
+      margin-block: 0.6em;
+    }
+    :where(ul, ol) {
+      margin-block: 0.6em;
+      padding-inline-start: 1.4em;
+    }
+    :where(ul) {
+      list-style: disc;
+    }
+    :where(ol) {
+      list-style: decimal;
+    }
+    :where(li) {
+      margin-block: 0.2em;
+    }
+    :where(a) {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    :where(code) {
+      font-size: 0.875em;
+      padding: 0.1em 0.35em;
+      border-radius: var(--radius-base);
+      background-color: color-mix(in oklab, currentColor 12%, transparent);
+    }
+    :where(pre) {
+      font-size: 0.875em;
+      overflow-x: auto;
+      padding: 0.75em;
+      margin-block: 0.6em;
+      border-radius: var(--radius-container);
+      background-color: color-mix(in oklab, currentColor 10%, transparent);
+    }
+    :where(pre) :where(code) {
+      padding: 0;
+      background: none;
+    }
+    :where(blockquote) {
+      margin-block: 0.6em;
+      padding-inline-start: 0.9em;
+      border-inline-start: 3px solid color-mix(in oklab, currentColor 30%, transparent);
+      opacity: 0.9;
+    }
+    :where(hr) {
+      margin-block: 1em;
+      border-color: color-mix(in oklab, currentColor 20%, transparent);
+    }
+    /* First and last children sit flush so cards stay evenly padded. */
+    > :first-child {
+      margin-block-start: 0;
+    }
+    > :last-child {
+      margin-block-end: 0;
+    }
+  }
 }

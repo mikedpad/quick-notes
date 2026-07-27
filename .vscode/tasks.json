@@ -2,15 +2,134 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "start",
-      "problemMatcher": [],
-      "label": "npm: start",
-      "detail": "npm run dev -- --https --host --open",
-      "group": {
-        "kind": "build",
-        "isDefault": true
+      "label": "dev",
+      "detail": "Start the Vite dev server (http://localhost:5173)",
+      "type": "shell",
+      "command": "pnpm dev --open",
+      "isBackground": true,
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": {
+        "owner": "vite",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^\\s*(?:\\[vite\\]\\s*)?(error|warning)\\s*:?\\s*(.*)$",
+          "severity": 1,
+          "message": 2
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "(?:VITE v|page reload|hmr update)",
+          "endsPattern": "(?:ready in|page reload|hmr update)"
+        }
       }
+    },
+    {
+      "label": "dev: host",
+      "detail": "Dev server exposed on the LAN, for testing on other devices",
+      "type": "shell",
+      "command": "pnpm start",
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "detail": "Produce the static site in ./build via adapter-static",
+      "type": "shell",
+      "command": "pnpm build",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "preview",
+      "detail": "Serve the production build from ./build",
+      "type": "shell",
+      "command": "pnpm preview",
+      "isBackground": true,
+      "dependsOn": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "detail": "Run the Vitest suite once",
+      "type": "shell",
+      "command": "pnpm test",
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "test: watch",
+      "detail": "Vitest in watch mode",
+      "type": "shell",
+      "command": "pnpm test:watch",
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "test: coverage",
+      "detail": "Vitest with a v8 coverage report",
+      "type": "shell",
+      "command": "pnpm test:coverage",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "check",
+      "detail": "svelte-check type/a11y diagnostics across the project",
+      "type": "shell",
+      "command": "pnpm check",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": {
+        "owner": "svelte-check",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^\\d+\\s+(ERROR|WARNING)\\s+\"(.*?)\"\\s+(\\d+):(\\d+)\\s+\"(.*)\"$",
+          "severity": 1,
+          "file": 2,
+          "line": 3,
+          "column": 4,
+          "message": 5
+        }
+      }
+    },
+    {
+      "label": "check: watch",
+      "detail": "svelte-check in watch mode",
+      "type": "shell",
+      "command": "pnpm check:watch",
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "lint",
+      "detail": "Prettier format check + ESLint",
+      "type": "shell",
+      "command": "pnpm lint",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "format",
+      "detail": "Rewrite files with Prettier",
+      "type": "shell",
+      "command": "pnpm format",
+      "presentation": { "reveal": "silent", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "generateData",
+      "detail": "Regenerate src/lib/data/seed.json with fresh faker seed data",
+      "type": "shell",
+      "command": "pnpm generateData",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
     }
   ]
 }
