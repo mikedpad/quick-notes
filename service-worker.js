@@ -1,39 +1,32 @@
 /**
- * Welcome to your Workbox-powered service worker!
+ * A tombstone for the service worker the 2020 Create React App build left behind.
  *
- * You'll need to register this file in your web app and you should
- * disable HTTP caching for this file too.
- * See https://goo.gl/nhQhGp
+ * This app has no service worker and wants none. The problem is that the old one
+ * is still registered in the browser of anyone who visited the React version:
+ * deleting the file from the server does not unregister it, and a failed update
+ * fetch leaves the existing worker in place, so those visitors would go on being
+ * served a six-year-old app out of its cache no matter what is deployed here.
  *
- * The rest of the code is auto-generated. Please don't update this file
- * directly; instead, make changes to your Workbox build configuration
- * and re-run your build process.
- * See https://goo.gl/2aRDsh
+ * A worker at the same URL is the one thing the browser will still fetch, so
+ * this one takes the registration down with it and empties every cache on its
+ * way out. It has to keep the old file's name and location to be found at all.
+ *
+ * Safe to delete once returning visitors have plausibly all been through — it is
+ * only reachable by someone whose browser already knows this path.
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+self.addEventListener('install', () => self.skipWaiting());
 
-importScripts(
-  "/quick-notes/precache-manifest.0609fb0df17a3e07809925a2aedfe1b0.js"
-);
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    (async () => {
+      const names = await caches.keys();
+      await Promise.all(names.map(name => caches.delete(name)));
+      await self.registration.unregister();
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-
-workbox.core.clientsClaim();
-
-/**
- * The workboxSW.precacheAndRoute() method efficiently caches and responds to
- * requests for URLs in the manifest.
- * See https://goo.gl/S9QRab
- */
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
-workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
-
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/quick-notes/index.html"), {
-  
-  blacklist: [/^\/_/,/\/[^/?]+\.[^/]+$/],
+      // Reload whatever is open, which now has no worker in front of it.
+      const clients = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients) client.navigate(client.url);
+    })(),
+  );
 });

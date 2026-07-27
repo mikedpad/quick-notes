@@ -1,0 +1,3 @@
+Stops GitHub Pages running the build through Jekyll, which discards every
+directory whose name begins with an underscore — including `_app`, which is the
+entire application.

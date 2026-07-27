@@ -1,1 +1,61 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"/><meta name="description" content="A simple example of virtual post-it notes using React and Material UI"/><title>Quick Notes</title></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="app"></div><script>!function(e){function t(t){for(var n,i,l=t[0],c=t[1],f=t[2],p=0,s=[];p<l.length;p++)i=l[p],Object.prototype.hasOwnProperty.call(o,i)&&o[i]&&s.push(o[i][0]),o[i]=0;for(n in c)Object.prototype.hasOwnProperty.call(c,n)&&(e[n]=c[n]);for(a&&a(t);s.length;)s.shift()();return u.push.apply(u,f||[]),r()}function r(){for(var e,t=0;t<u.length;t++){for(var r=u[t],n=!0,l=1;l<r.length;l++){var c=r[l];0!==o[c]&&(n=!1)}n&&(u.splice(t--,1),e=i(i.s=r[0]))}return e}var n={},o={1:0},u=[];function i(t){if(n[t])return n[t].exports;var r=n[t]={i:t,l:!1,exports:{}};return e[t].call(r.exports,r,r.exports,i),r.l=!0,r.exports}i.m=e,i.c=n,i.d=function(e,t,r){i.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},i.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},i.t=function(e,t){if(1&t&&(e=i(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(i.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var n in e)i.d(r,n,function(t){return e[t]}.bind(null,n));return r},i.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return i.d(t,"a",t),t},i.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},i.p="/quick-notes/";var l=this["webpackJsonpquick-notes"]=this["webpackJsonpquick-notes"]||[],c=l.push.bind(l);l.push=t,l=l.slice();for(var f=0;f<l.length;f++)t(l[f]);var a=c;r()}([])</script><script src="/quick-notes/static/js/2.0a45f65d.chunk.js"></script><script src="/quick-notes/static/js/main.667d970c.chunk.js"></script></body></html>
+<!doctype html>
+<html lang="en" data-theme="cerberus" data-wall="plaster">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Offline-first markdown notes that live in your browser" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // The wall surface is a stored preference, and the page is prerendered
+      // with the default one. Applying it before the first paint is the
+      // difference between opening onto a charcoal wall and opening onto a
+      // white flash. Kept in sync by hand with `state/wall.svelte.ts`.
+      try {
+        const stored = JSON.parse(localStorage.getItem('quick-notes:wall') ?? '{}');
+        if (['plaster', 'cork', 'charcoal'].includes(stored.surface)) {
+          document.documentElement.dataset.wall = stored.surface;
+        }
+      } catch {
+        /* no storage, no preference — the default in the markup stands */
+      }
+    </script>
+    <link href="./_app/immutable/entry/start.DDhJf0T2.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/_9AUH2eV.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BoYWdSS2.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app.BF2gZeUQ.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/xihTtKlq.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/0.B5mTfex5.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/713_Ieor.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/2.BFoUCP4h.js" rel="modulepreload">
+		<!--1uha8ag--><!----><title>Quick Notes</title>
+		<link href="./_app/immutable/assets/0.8Lq3mggh.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/2.BsOQZPKM.css" rel="stylesheet">
+  </head>
+
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><header class="svelte-12qhfyh"><div class="plate svelte-12qhfyh"><h1 class="svelte-12qhfyh">Quick Notes</h1></div> <div class="corner svelte-12qhfyh"><span class="count svelte-12qhfyh"></span> <div class="options svelte-151259s"><button type="button" class="trigger svelte-151259s" aria-label="Wall options" title="Wall options" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-sliders-horizontal"><!--[--><!----><path d="M10 5H3"><!----></path><!----><!----><path d="M12 19H3"><!----></path><!----><!----><path d="M14 3v4"><!----></path><!----><!----><path d="M16 17v4"><!----></path><!----><!----><path d="M21 12h-9"><!----></path><!----><!----><path d="M21 19h-5"><!----></path><!----><!----><path d="M21 5h-7"><!----></path><!----><!----><path d="M8 10v4"><!----></path><!----><!----><path d="M8 12H3"><!----></path><!----><!--]--><!----></svg><!----></button> <!--[-1--><!--]--></div><!----></div></header> <main class="svelte-12qhfyh"><!--[--><!--[-1--><div class="wall svelte-146204p"><!--[--><!--]--></div><!--]--> <button type="button" class="pad svelte-1uha8ag" aria-label="New note" title="New note"><span class="top svelte-1uha8ag"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-plus"><!--[--><!----><path d="M5 12h14"><!----></path><!----><!----><path d="M12 5v14"><!----></path><!----><!--]--><!----></svg><!----></span></button> <dialog aria-label="New note" class="svelte-jwp4es"><form class="sheet svelte-jwp4es" style="--paper-light:oklch(0.96 0.1 102);--paper-base:oklch(0.93 0.115 102);--paper-shade:oklch(0.87 0.12 100);"><span class="tape svelte-jwp4es" aria-hidden="true"></span> <div class="scroll svelte-jwp4es"><header class="svelte-jwp4es"><span class="mode svelte-jwp4es">a fresh note</span> <button type="button" class="close svelte-jwp4es" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-x"><!--[--><!----><path d="M18 6 6 18"><!----></path><!----><!----><path d="m6 6 12 12"><!----></path><!----><!--]--><!----></svg><!----></button></header> <input name="title" class="title svelte-jwp4es" placeholder="Title goes here…" value=""/> <!--[-1--><!--]--> <textarea name="body" class="body svelte-jwp4es" placeholder="Scribble something…"></textarea> <!--[-1--><!--]--></div> <footer class="svelte-jwp4es"><fieldset class="papers svelte-jwp4es"><legend class="sr-only">Paper</legend> <!--[--><label class="swatch svelte-jwp4es" style="--swatch: oklch(0.93 0.115 102)" title="Canary"><input type="radio" name="color" value="0" class="svelte-jwp4es"/> <span class="sr-only">Canary</span></label><label class="swatch svelte-jwp4es" style="--swatch: oklch(0.88 0.09 356)" title="Pink"><input type="radio" name="color" value="1" class="svelte-jwp4es"/> <span class="sr-only">Pink</span></label><label class="swatch svelte-jwp4es" style="--swatch: oklch(0.92 0.09 152)" title="Mint"><input type="radio" name="color" value="2" class="svelte-jwp4es"/> <span class="sr-only">Mint</span></label><label class="swatch svelte-jwp4es" style="--swatch: oklch(0.9 0.07 226)" title="Sky"><input type="radio" name="color" value="3" class="svelte-jwp4es"/> <span class="sr-only">Sky</span></label><label class="swatch svelte-jwp4es" style="--swatch: oklch(0.88 0.1 66)" title="Tangerine"><input type="radio" name="color" value="4" class="svelte-jwp4es"/> <span class="sr-only">Tangerine</span></label><!--]--></fieldset> <div class="acts svelte-jwp4es"><button type="button" class="ghost svelte-jwp4es">Cancel</button> <button type="submit" class="pill svelte-jwp4es"><!--[-1-->Stick it<!--]--></button></div></footer> <button type="button" class="grip top svelte-jwp4es" aria-label="Resize the note from its top edge"></button> <button type="button" class="grip bottom svelte-jwp4es" aria-label="Resize the note from its bottom edge"></button></form></dialog> <!--$s1--><dialog aria-labelledby="s1" data-confirm-dialog="" class="svelte-1ohlqe6"><div class="sheet svelte-1ohlqe6"><span class="tape svelte-1ohlqe6" aria-hidden="true"></span> <h2 id="s1" class="svelte-1ohlqe6">Throw this away?</h2> <p class="svelte-1ohlqe6">This note has scribbles on it that have not been saved.</p> <div class="acts svelte-1ohlqe6"><button type="button" class="ghost svelte-1ohlqe6">Keep writing</button> <button type="button" class="pill svelte-1ohlqe6 destructive">Bin it</button></div></div></dialog><!----><!----> <!--$s2--><dialog aria-labelledby="s2" data-confirm-dialog="" class="svelte-1ohlqe6"><div class="sheet svelte-1ohlqe6"><span class="tape svelte-1ohlqe6" aria-hidden="true"></span> <h2 id="s2" class="svelte-1ohlqe6">Take this note down?</h2> <p class="svelte-1ohlqe6"></p> <div class="acts svelte-1ohlqe6"><button type="button" class="ghost svelte-1ohlqe6">Keep it</button> <button type="button" class="pill svelte-1ohlqe6 destructive">Delete</button></div></div></dialog><!----><!--]--><!----></main><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_vpwnlf = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/quick-notes"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.DDhJf0T2.js"),
+						import("./_app/immutable/entry/app.BF2gZeUQ.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
